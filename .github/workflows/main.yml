@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: tailcallhq/gh-action@7000f65
+        uses: tailcallhq/gh-action@7000f6520a88cb143205b75a2d6ee2e422de63e7
         with:
           who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
