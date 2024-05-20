@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: tailcallhq/gh-action@7000f6520a88cb143205b75a2d6ee2e422de63e7
+        uses: tailcallhq/gh-action@5eda4905b1f734ccb5ee1448035d172c693ae44a
         with:
           aws-access-key-id: 'aws-access-key-id'
           aws-secret-access-key: 'aws-secret-access-key'
