@@ -2,15 +2,19 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  aws-access-key-id:
+    description: 'AWS_ACCESS_KEY_ID'
     required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  secret-access-key:
+    description: 'AWS_SECRET_ACCESS_KEY'
+    required: true
+  config:
+    description: 'Tailcall config path'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.who-to-greet }}
+    - ${{ inputs.aws-access-key-id }}
+    - ${{ inputs.secret-access-key }}
+    - ${{ inputs.config }}
