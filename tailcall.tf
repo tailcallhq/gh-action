@@ -15,6 +15,10 @@ variable "AWS_REGION" {
     type = string
 }
 
+variable "CONFIG_PATH" {
+    type = string
+}
+
 provider "aws" { region = var.AWS_REGION }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -53,8 +57,8 @@ resource "local_sensitive_file" "bootstrap" {
 }
 
 resource "local_sensitive_file" "config" {
-    content_base64 = filebase64("config/config.graphql")
-    filename = "config/config.graphql"
+    content_base64 = filebase64(var.CONFIG_PATH)
+    filename = var.CONFIG_PATH
 }
 
 data "archive_file" "tailcall" {
