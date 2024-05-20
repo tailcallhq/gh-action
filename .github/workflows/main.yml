@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Deploy Tailcall
         id: deploy-tailcall
-        uses: tailcallhq/gh-action@6ca6da0c3bfd3d58a627214f8a8d4eaa5e8c0508
+        uses: tailcallhq/gh-action@22297e64fc4164321ec69c4bee82c6b468b50bbf
         with:
           aws-access-key-id: 'aws-access-key-id'
           aws-secret-access-key: 'aws-secret-access-key'
