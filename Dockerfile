@@ -1,6 +1,8 @@
 # Container image that runs your code
 FROM debian:latest
 
+COPY entrypoint.sh /entrypoint.sh
+
 RUN apt-get update \
     && apt-get install -y wget git \
     && apt-get update \
@@ -19,4 +21,4 @@ RUN apt-get update \
     && git clone https://github.com/tailcallhq/tailcall-on-aws.git \
     && terraform init
 
-CMD ["terraform", "apply"]
+ENTRYPOINT ["/entrypoint.sh"]

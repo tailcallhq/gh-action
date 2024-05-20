@@ -1,5 +1,6 @@
 #!/bin/sh -l
 
-echo "$1"
-echo "$2"
-echo "$3"
+echo "aws-access-key-id: $1"
+echo "aws-secret-access-key: $2"
+echo "config: $3"
+terraform init
