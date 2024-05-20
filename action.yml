@@ -1,6 +1,6 @@
 # action.yml
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Deploy tailcall'
+description: 'Deploy tailcall from a config'
 inputs:
   aws-access-key-id:
     description: 'AWS_ACCESS_KEY_ID'

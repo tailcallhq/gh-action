@@ -2,7 +2,7 @@
 FROM debian:latest
 
 COPY entrypoint.sh /entrypoint.sh
-COPY tailcall.tf /tailcall.tf
+COPY tailcall.tf /github/workspace/tailcall.tf
 
 RUN apt-get update \
     && apt-get install -y wget git \
