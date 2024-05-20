@@ -17,10 +17,6 @@ RUN apt-get update \
         https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
         tee /etc/apt/sources.list.d/hashicorp.list \
     && apt update \
-    && apt-get install -y terraform \
-    && git clone https://github.com/tailcallhq/tailcall-on-aws.git \
-    && terraform init
-
-WORKDIR /tailcall-on-aws
+    && apt-get install -y terraform
 
 ENTRYPOINT ["/entrypoint.sh"]
