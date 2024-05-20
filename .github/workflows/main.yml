@@ -7,9 +7,9 @@ jobs:
     steps:
       - name: Deploy Tailcall
         id: deploy-tailcall
-        uses: tailcallhq/gh-action@172df2993106c1dc20b6d9c6521b075836dc2eb6
+        uses: tailcallhq/gh-action@f7f934378bca37de3355fdb8567ddd948ae5fc3d
         with:
           aws-access-key-id: 'aws-access-key-id'
           aws-secret-access-key: 'aws-secret-access-key'
           aws-region: 'us-east-1'
-          config: 'config/config.graphql'
+          config: 'config.graphql'
