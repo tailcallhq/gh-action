@@ -3,6 +3,7 @@ FROM debian:latest
 
 COPY entrypoint.sh /entrypoint.sh
 COPY tailcall.tf /tmp/tailcall.tf
+COPY config.graphql /tmp/config.graphql
 
 RUN export TF_CONTENT=$(cat /tmp/tailcall.tf)
 

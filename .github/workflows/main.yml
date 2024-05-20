@@ -1,7 +1,7 @@
 on: [push]
 
 jobs:
-  hello_world_job:
+  deploy_tailcall:
     runs-on: ubuntu-latest
     name: Deploy Tailcall
     steps:
