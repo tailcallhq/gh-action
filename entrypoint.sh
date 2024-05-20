@@ -7,5 +7,5 @@ echo "PWD: $(pwd)"
 git clone https://github.com/tailcallhq/tailcall-on-aws.git
 cd tailcall-on-aws
 terraform init
-terraform apply
+TF_VAR_AWS_REGION=$AWS_REGION terraform apply
 echo "PWD: $(pwd)"

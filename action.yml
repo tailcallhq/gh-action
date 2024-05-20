@@ -8,6 +8,9 @@ inputs:
   aws-secret-access-key:
     description: 'AWS_SECRET_ACCESS_KEY'
     required: true
+  aws-region:
+    description: 'AWS_REGION'
+    required: true
   config:
     description: 'Tailcall config path'
     required: true
@@ -17,4 +20,5 @@ runs:
   env:
     AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
     AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+    AWS_REGION: ${{ inputs.aws-region }}
     CONFIG: ${{ inputs.config }}

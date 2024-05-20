@@ -3,12 +3,13 @@ on: [push]
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Deploy Tailcall
     steps:
-      - name: Hello world action step
-        id: hello
+      - name: Deploy Tailcall
+        id: deploy-tailcall
         uses: tailcallhq/gh-action@255eb49f7e93d9f3c8c2cfe1a45a5a9930fdea41
         with:
           aws-access-key-id: 'aws-access-key-id'
           aws-secret-access-key: 'aws-secret-access-key'
+          aws-region: 'us-east-1'
           config: 'config/config.graphql'
