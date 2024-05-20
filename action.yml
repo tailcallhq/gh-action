@@ -5,7 +5,7 @@ inputs:
   aws-access-key-id:
     description: 'AWS_ACCESS_KEY_ID'
     required: true
-  secret-access-key:
+  aws-secret-access-key:
     description: 'AWS_SECRET_ACCESS_KEY'
     required: true
   config:
