@@ -1,7 +1,7 @@
 #!/bin/sh -l
 
-echo "aws-access-key-id: $1"
-echo "aws-secret-access-key: $2"
-echo "config: $3"
+echo "aws-access-key-id: $AWS_ACCESS_KEY_ID"
+echo "aws-secret-access-key: $AWS_SECRET_ACCESS_KEY"
+echo "config: $CONFIG"
 cd tailcall-on-aws
 terraform init

@@ -14,7 +14,7 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.aws-access-key-id }}
-    - ${{ inputs.secret-access-key }}
-    - ${{ inputs.config }}
+  env:
+    AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+    AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+    CONFIG: ${{ inputs.config }}

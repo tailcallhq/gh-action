@@ -21,4 +21,6 @@ RUN apt-get update \
     && git clone https://github.com/tailcallhq/tailcall-on-aws.git \
     && terraform init
 
+WORKDIR /tailcall-on-aws
+
 ENTRYPOINT ["/entrypoint.sh"]
