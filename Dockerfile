@@ -1,8 +1,22 @@
 # Container image that runs your code
-FROM alpine:3.10
+FROM debian:latest
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
-COPY entrypoint.sh /entrypoint.sh
+RUN apt-get update \
+    && apt-get install -y wget git \
+    && apt-get update \
+    && apt-get install -y gnupg software-properties-common \
+    && wget -O- https://apt.releases.hashicorp.com/gpg | \
+      gpg --dearmor | \
+      tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null \
+    && gpg --no-default-keyring \
+        --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+        --fingerprint \
+    && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+        https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+        tee /etc/apt/sources.list.d/hashicorp.list \
+    && apt update \
+    && apt-get install -y terraform \
+    && git clone https://github.com/tailcallhq/tailcall-on-aws.git \
+    && terraform init
 
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["terraform", "apply"]
