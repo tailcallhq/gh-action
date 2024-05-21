@@ -76,7 +76,7 @@ data "archive_file" "tailcall" {
         local_sensitive_file.config
     ]
     type        = "zip"
-    source_dir  = "config/bootstrap"
+    source_dir  = "config"
     output_path = "tailcall.zip"
 }
 
