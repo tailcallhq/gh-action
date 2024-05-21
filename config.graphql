@@ -1,4 +1,9 @@
-schema {
+schema
+@server(
+   headers: {
+      cors: {allowHeaders: ["*"], allowOrigins: ["*"]}
+   }
+) {
    query: Query
 }
 
@@ -8,5 +13,13 @@ type User {
 }
 
 type Query {
+   posts: [Post] @http(path: "/posts", baseURL: "http://jsonplaceholder.typicode.com")
    user: User @http(path: "/users/1", baseURL: "http://jsonplaceholder.typicode.com")
+}
+
+type Post {
+   userId: Int
+   id: Int
+   title: String
+   body: String
 }
