@@ -61,7 +61,7 @@ data "http" "bootstrap" {
 
 resource "local_sensitive_file" "bootstrap" {
     content_base64 = data.http.bootstrap.response_body_base64
-    filename       = "bootstrap"
+    filename       = "config/bootstrap"
 }
 
 resource "local_sensitive_file" "config" {
