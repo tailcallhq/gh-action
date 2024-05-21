@@ -5,10 +5,6 @@ COPY entrypoint.sh /entrypoint.sh
 COPY tailcall.tf /tmp/tailcall.tf
 COPY config.graphql /tmp/config.graphql
 
-RUN export TF_CONTENT=$(cat /tmp/tailcall.tf)
-
-ENV TF_CONTENT=$TF_CONTENT
-
 RUN apt-get update \
     && apt-get install -y wget git \
     && apt-get update \
