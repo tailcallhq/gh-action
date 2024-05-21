@@ -1,0 +1,16 @@
+on: [push]
+
+jobs:
+  deploy_tailcall:
+    runs-on: ubuntu-latest
+    name: Deploy Tailcall
+    steps:
+      - name: Deploy Tailcall
+        id: deploy-tailcall
+        uses: tailcallhq/gh-action@1285838b4ef2ed20b46bd5d5d322c87e1e942286
+        with:
+          aws-access-key-id: 'oasijdfoisdf'
+          aws-secret-access-key: 'iosjdfoijsdofij'
+          aws-region: 'us-east-1'
+          aws-iam-role: 'iam_for_tailcall1'
+          config: 'config.graphql'
