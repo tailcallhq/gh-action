@@ -11,6 +11,14 @@ inputs:
   aws-region:
     description: 'AWS_REGION'
     required: true
+  aws-iam-role:
+    description: 'AWS_IAM_ROLE'
+    default: 'iam_for_tailcall'
+    required: false
+  aws-lambda-function-name:
+    description: 'AWS_LAMBDA_FUNCTION_NAME'
+    default: 'tailcall'
+    required: false
   config:
     description: 'Tailcall config path'
     required: true
@@ -21,4 +29,6 @@ runs:
     AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
     AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
     AWS_REGION: ${{ inputs.aws-region }}
+    AWS_IAM_ROLE: ${{ inputs.aws-iam-role }}
+    AWS_LAMBDA_FUNCTION_NAME: ${{ inputs.aws-lambda-function-name }}
     CONFIG: ${{ inputs.config }}

@@ -19,6 +19,14 @@ variable "CONFIG_PATH" {
     type = string
 }
 
+variable "AWS_IAM_ROLE" {
+    type = string
+}
+
+variable "AWS_LAMBDA_FUNCTION_NAME" {
+    type = string
+}
+
 provider "aws" { region = var.AWS_REGION }
 
 data "aws_iam_policy_document" "assume_role" {
@@ -35,7 +43,7 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "iam_for_tailcall" {
-    name               = "iam_for_tailcall"
+    name               = var.AWS_IAM_ROLE
     assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
@@ -78,7 +86,7 @@ resource "aws_lambda_function" "tailcall" {
     ]
 
     role = aws_iam_role.iam_for_tailcall.arn
-    function_name    = "tailcall"
+    function_name    = var.AWS_LAMBDA_FUNCTION_NAME
     runtime          = "provided.al2"
     architectures    = ["x86_64"]
     handler          = "bootstrap"

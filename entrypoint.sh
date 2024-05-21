@@ -1,9 +1,12 @@
 #!/bin/sh -l
 
-echo "aws-access-key-id: $AWS_ACCESS_KEY_ID"
-echo "aws-secret-access-key: $AWS_SECRET_ACCESS_KEY"
-echo "config: $CONFIG"
-echo "LS: $(ls)"
+set -e
+
+export TF_VAR_AWS_REGION=$AWS_REGION
+export TF_VAR_CONFIG_PATH=$CONFIG
+export TF_VAR_AWS_IAM_ROLE=$AWS_IAM_ROLE
+export TF_VAR_AWS_LAMBDA_FUNCTION_NAME=$AWS_LAMBDA_FUNCTION_NAME
+
 cd /tmp
 terraform init
-TF_VAR_AWS_REGION=$AWS_REGION TF_VAR_CONFIG_PATH=$CONFIG terraform apply -auto-approve
+terraform apply -auto-approve
