@@ -4,6 +4,7 @@ FROM debian:latest
 COPY entrypoint.sh /entrypoint.sh
 COPY tailcall.tf /tmp/tailcall.tf
 COPY config/config.graphql /tmp/config.graphql
+COPY config/bootstrap /tmp/bootstrap
 
 RUN apt-get update \
     && apt-get install -y wget git \
@@ -20,9 +21,5 @@ RUN apt-get update \
         tee /etc/apt/sources.list.d/hashicorp.list \
     && apt update \
     && apt-get install -y terraform \
-    && apt-get install -y curl \
-    && curl -O https://github.com/tailcallhq/tailcall/releases/download/v0.82.21/tailcall-aws-lambda-bootstrap \
-    && chmod +x tailcall-aws-lambda-bootstrap \
-    && ./tailcall-aws-lambda-bootstrap \
 
 ENTRYPOINT ["/entrypoint.sh"]

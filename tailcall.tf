@@ -47,20 +47,20 @@ resource "aws_iam_role" "iam_for_tailcall" {
     assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-provider "github" {}
-
-data "github_release" "tailcall" {
-    owner = "tailcallhq"
-    repository = "tailcall"
-    retrieve_by = "latest"
-}
-
-data "http" "bootstrap" {
-    url = data.github_release.tailcall.assets[index(data.github_release.tailcall.assets.*.name, "tailcall-aws-lambda-bootstrap")].browser_download_url
-}
+#provider "github" {}
+#
+#data "github_release" "tailcall" {
+#    owner = "tailcallhq"
+#    repository = "tailcall"
+#    retrieve_by = "latest"
+#}
+#
+#data "http" "bootstrap" {
+#    url = data.github_release.tailcall.assets[index(data.github_release.tailcall.assets.*.name, "tailcall-aws-lambda-bootstrap")].browser_download_url
+#}
 
 resource "local_sensitive_file" "bootstrap" {
-    content_base64 = data.http.bootstrap.response_body_base64
+    content_base64 = filebase64("bootstrap")
     filename       = "config/bootstrap"
 }
 
