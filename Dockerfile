@@ -20,6 +20,6 @@ RUN apt-get update \
         https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
         tee /etc/apt/sources.list.d/hashicorp.list \
     && apt update \
-    && apt-get install -y terraform \
+    && apt-get install -y terraform
 
 ENTRYPOINT ["/entrypoint.sh"]
