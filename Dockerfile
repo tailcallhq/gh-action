@@ -3,7 +3,7 @@ FROM debian:latest
 
 COPY entrypoint.sh /entrypoint.sh
 COPY tailcall.tf /tmp/tailcall.tf
-COPY config.graphql /tmp/config.graphql
+COPY config/config.graphql /tmp/config.graphql
 
 RUN apt-get update \
     && apt-get install -y wget git \
