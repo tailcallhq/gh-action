@@ -76,7 +76,7 @@ data "archive_file" "tailcall" {
         local_sensitive_file.config
     ]
     type        = "zip"
-    source_dir  = "config/"
+    source_dir  = "config/bootstrap"
     output_path = "tailcall.zip"
 }
 
@@ -87,7 +87,7 @@ resource "aws_lambda_function" "tailcall" {
 
     role = aws_iam_role.iam_for_tailcall.arn
     function_name    = var.AWS_LAMBDA_FUNCTION_NAME
-    runtime          = "nodejs"
+    runtime          = "nodejs18.18.0"
     architectures    = ["x86_64"]
     handler          = "bootstrap"
     filename         = data.archive_file.tailcall.output_path
