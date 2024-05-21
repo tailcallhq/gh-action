@@ -1,25 +1,22 @@
 # Container image that runs your code
-FROM debian:latest
+FROM amazonlinux:2
 
 COPY entrypoint.sh /entrypoint.sh
 COPY tailcall.tf /tmp/tailcall.tf
 COPY config/config.graphql /tmp/config.graphql
-COPY config/bootstrap /tmp/bootstrap
 
-RUN apt-get update \
-    && apt-get install -y wget git \
-    && apt-get update \
-    && apt-get install -y gnupg software-properties-common \
-    && wget -O- https://apt.releases.hashicorp.com/gpg | \
-      gpg --dearmor | \
-      tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null \
-    && gpg --no-default-keyring \
-        --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-        --fingerprint \
-    && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-        https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-        tee /etc/apt/sources.list.d/hashicorp.list \
-    && apt update \
-    && apt-get install -y terraform
+RUN yum update \
+    && yum upgrade \
+    && yum install \
+    && yum install -y yum-utils \
+    && yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo \
+    && yum -y install terraform \
+    && yum -y install curl \
+    && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
+    && source $HOME/.cargo/env \
+    && git clone https://github.com/tailcallhq/tailcall \
+    && cd tailcall \
+    && cargo lambda build -p tailcall-aws-lambda --release \
+    && cp target/lambda/release/tailcall-aws-lambda/bootstrap /tmp/bootstrap \
 
 ENTRYPOINT ["/entrypoint.sh"]
