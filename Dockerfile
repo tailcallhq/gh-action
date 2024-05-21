@@ -19,6 +19,6 @@ RUN yum update -y \
     && git clone https://github.com/tailcallhq/tailcall \
     && cd tailcall \
     && cargo lambda build -p tailcall-aws-lambda --release \
-    && cp target/lambda/release/tailcall-aws-lambda/bootstrap /tmp/bootstrap
+    && mv target/lambda/tailcall-aws-lambda/bootstrap /tmp
 
-ENTRYPOINT ["/entrypoint.sh"]
+ ENTRYPOINT ["/entrypoint.sh"]
