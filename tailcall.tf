@@ -87,7 +87,7 @@ resource "aws_lambda_function" "tailcall" {
 
     role = aws_iam_role.iam_for_tailcall.arn
     function_name    = var.AWS_LAMBDA_FUNCTION_NAME
-    runtime          = "nodejs18.18"
+    runtime          = "nodejs18.20.2"
     architectures    = ["x86_64"]
     handler          = "bootstrap"
     filename         = data.archive_file.tailcall.output_path
