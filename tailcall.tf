@@ -15,10 +15,6 @@ variable "AWS_REGION" {
     type = string
 }
 
-variable "TAILCALL_CONFIG_PATH" {
-    type = string
-}
-
 variable "AWS_IAM_ROLE" {
     type = string
 }
@@ -69,7 +65,7 @@ resource "local_sensitive_file" "bootstrap" {
 }
 
 resource "local_sensitive_file" "config" {
-    content_base64 = filebase64(var.TAILCALL_CONFIG_PATH)
+    content_base64 = filebase64("config.graphql")
     filename = "config/config.graphql"
 }
 
