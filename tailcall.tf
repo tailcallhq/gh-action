@@ -15,7 +15,7 @@ variable "AWS_REGION" {
     type = string
 }
 
-variable "CONFIG_PATH" {
+variable "TAILCALL_CONFIG_PATH" {
     type = string
 }
 
@@ -24,6 +24,10 @@ variable "AWS_IAM_ROLE" {
 }
 
 variable "AWS_LAMBDA_FUNCTION_NAME" {
+    type = string
+}
+
+variable "TAILCALL_VERSION" {
     type = string
 }
 
@@ -47,26 +51,25 @@ resource "aws_iam_role" "iam_for_tailcall" {
     assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-#provider "github" {}
-#
-#data "github_release" "tailcall" {
-#    owner = "tailcallhq"
-#    repository = "tailcall"
-#    retrieve_by = "latest"
-#}
-#
-#data "http" "bootstrap" {
-#    url = data.github_release.tailcall.assets[index(data.github_release.tailcall.assets.*.name, "tailcall-aws-lambda-bootstrap")].browser_download_url
-#}
+provider "github" {}
+
+data "github_release" "tailcall" {
+   owner = "tailcallhq"
+   repository = "tailcall"
+   retrieve_by = var.TAILCALL_VERSION
+}
+
+data "http" "bootstrap" {
+   url = data.github_release.tailcall.assets[index(data.github_release.tailcall.assets.*.name, "tailcall-aws-lambda-bootstrap")].browser_download_url
+}
 
 resource "local_sensitive_file" "bootstrap" {
-#    content_base64 = data.http.bootstrap.response_body_base64
-    content_base64 = filebase64("bootstrap")
+   content_base64 = data.http.bootstrap.response_body_base64
     filename       = "config/bootstrap"
 }
 
 resource "local_sensitive_file" "config" {
-    content_base64 = filebase64(var.CONFIG_PATH)
+    content_base64 = filebase64(var.TAILCALL_CONFIG_PATH)
     filename = "config/config.graphql"
 }
 
