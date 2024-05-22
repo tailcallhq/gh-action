@@ -23,7 +23,7 @@ inputs:
     description: 'Tailcall version'
     default: 'latest'
   tailcall-config:
-    description: 'Tailcall config path'
+    description: 'Tailcall config'
     required: true
 runs:
   using: 'docker'
