@@ -7,7 +7,7 @@ COPY $TAILCALL_CONFIG /tmp/config.graphql
 
 RUN yum update -y && yum upgrade -y
 RUN yum install -y yum-utils
-RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo \
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 RUN yum -y install terraform
 
 ENTRYPOINT ["/entrypoint.sh"]
