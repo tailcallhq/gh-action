@@ -67,7 +67,7 @@ resource "local_sensitive_file" "bootstrap" {
 
 resource "local_sensitive_file" "config" {
     content_base64 = filebase64(var.CONFIG_PATH)
-    filename = var.CONFIG_PATH
+    filename = format("config/%s", var.CONFIG_PATH)
 }
 
 data "archive_file" "tailcall" {
