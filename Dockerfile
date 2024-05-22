@@ -18,6 +18,7 @@ RUN yum update -y \
     && export PATH=$PATH:/zig-linux-x86_64-0.13.0-dev.230+50a141945 \
     && git clone https://github.com/tailcallhq/tailcall \
     && cd tailcall \
+    && git checkout aws-lambda \
     && cargo lambda build -p tailcall-aws-lambda --release --target x86_64-unknown-linux-musl \
     && mv target/lambda/tailcall-aws-lambda/bootstrap /tmp
 

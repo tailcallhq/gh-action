@@ -47,17 +47,17 @@ resource "aws_iam_role" "iam_for_tailcall" {
     assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-provider "github" {}
-
-data "github_release" "tailcall" {
-    owner = "tailcallhq"
-    repository = "tailcall"
-    retrieve_by = "latest"
-}
-
-data "http" "bootstrap" {
-    url = data.github_release.tailcall.assets[index(data.github_release.tailcall.assets.*.name, "tailcall-aws-lambda-bootstrap")].browser_download_url
-}
+#provider "github" {}
+#
+#data "github_release" "tailcall" {
+#    owner = "tailcallhq"
+#    repository = "tailcall"
+#    retrieve_by = "latest"
+#}
+#
+#data "http" "bootstrap" {
+#    url = data.github_release.tailcall.assets[index(data.github_release.tailcall.assets.*.name, "tailcall-aws-lambda-bootstrap")].browser_download_url
+#}
 
 resource "local_sensitive_file" "bootstrap" {
 #    content_base64 = data.http.bootstrap.response_body_base64
@@ -67,7 +67,7 @@ resource "local_sensitive_file" "bootstrap" {
 
 resource "local_sensitive_file" "config" {
     content_base64 = filebase64(var.CONFIG_PATH)
-    filename = format("config/%s", var.CONFIG_PATH)
+    filename = "config/config.graphql"
 }
 
 data "archive_file" "tailcall" {
