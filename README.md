@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Deploy Tailcall
         id: deploy-tailcall
-        uses: tailcallhq/gh-action@a629949cab3e55b0f3a3989fc3bcdd9a7ac3a482
+        uses: tailcallhq/gh-action@v0.2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
