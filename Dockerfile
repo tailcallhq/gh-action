@@ -4,8 +4,7 @@ COPY entrypoint.sh /tmp/entrypoint.sh
 COPY tailcall.tf /tmp/tailcall.tf
 
 RUN apk add --no-cache curl jq
-RUN LATEST_TAILCALL_VERSION=$(curl https://api.github.com/repos/tailcallhq/tailcall/releases/latest -s | jq .name -r)
-RUN echo $LATEST_TAILCALL_VERSION > /tmp/version.txt
+RUN curl https://api.github.com/repos/tailcallhq/tailcall/releases/latest -s | jq .name -r > /tmp/version.txt
 
 FROM hashicorp/terraform:latest
 
@@ -13,4 +12,4 @@ COPY --from=builder /tmp/entrypoint.sh /entrypoint.sh
 COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
 COPY --from=builder /tmp/version.txt /version.txt
 
-ENTRYPOINT LATEST_TAILCALL_VERSION=$(cat /version.txt) /bin/sh /entrypoint.sh
+ENTRYPOINT /bin/sh /entrypoint.sh "$(cat /version.txt)"
