@@ -93,7 +93,7 @@ resource "aws_lambda_function" "tailcall" {
     data.archive_file.tailcall
   ]
 
-  role             = coalesce(data.aws_iam_role.existing_role.arn, aws_iam_role.iam_for_tailcall[1].arn)
+  role             = length(data.aws_iam_role.existing_role.arn) > 0 ? data.aws_iam_role.existing_role.arn : aws_iam_role.iam_for_tailcall[0].arn
   function_name    = var.AWS_LAMBDA_FUNCTION_NAME
   runtime          = "provided.al2"
   architectures    = ["x86_64"]
