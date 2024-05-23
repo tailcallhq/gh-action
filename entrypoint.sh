@@ -27,10 +27,9 @@ setup_terraform() {
 }
 
 setup_flyctl() {
-  curl -L https://fly.io/install.sh | sh
-  export FLYCTL_INSTALL="/root/.fly"
-  export PATH="$FLYCTL_INSTALL/bin:$PATH"
-  cp /root/.fly/bin/flyctl /usr/local/bin/flyctl
+  EXPORT_COMMANDS=(curl -L https://fly.io/install.sh | sh | tail -n 2)
+  echo $EXPORT_COMMANDS
+  eval $EXPORT_COMMANDS
 }
 
 if [ "$PROVIDER" = "aws" ]; then
