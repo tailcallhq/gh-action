@@ -1,5 +1,6 @@
 FROM alpine:latest as builder
 
+COPY entrypoint.sh /entrypoint.sh
 COPY tailcall.tf /tmp/tailcall.tf
 COPY $TAILCALL_CONFIG /tmp/config.graphql
 
@@ -8,6 +9,7 @@ RUN if [ "$TAILCALL_VERSION" = "latest" ]; then TAILCALL_VERSION=$(curl https://
 
 FROM hashicorp/terraform:latest
 
+COPY --from=builder /entrypoint.sh /entrypoint.sh
 COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
 COPY --from=builder /tmp/config.graphql /tmp/config.graphql
 
