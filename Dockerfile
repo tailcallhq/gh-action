@@ -12,7 +12,7 @@ FROM hashicorp/terraform:latest
 
 COPY --from=builder /tmp/entrypoint.sh /entrypoint.sh
 COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
-COPY --from=builder /tmp/config.graphql /tmp/config.graphq
+COPY --from=builder /tmp/config.graphql /tmp/config.graphql
 COPY --from=builder /tmp/version.txt /tmp/version.txt
 
 RUN export TAILCALL_VERSION=$(cat /tmp/version.txt)
