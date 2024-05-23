@@ -14,4 +14,4 @@ COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
 COPY --from=builder /tmp/version.txt /version.txt
 COPY --from=builder /tmp/main.py /tmp/main.py
 
-ENTRYPOINT /bin/sh /entrypoint.sh "$(cat /version.txt)"
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
