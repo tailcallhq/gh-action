@@ -11,10 +11,4 @@ FROM hashicorp/terraform:latest
 COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
 COPY --from=builder /tmp/config.graphql /tmp/config.graphql
 
-ENV TF_VAR_TAILCALL_VERSION $TAILCALL_VERSION
-ENV TF_VAR_AWS_REGION $AWS_REGION
-ENV TF_VAR_AWS_IAM_ROLE $AWS_IAM_ROLE
-ENV TF_VAR_AWS_LAMBDA_FUNCTION_NAME $AWS_LAMBDA_FUNCTION_NAME
-
-WORKDIR /tmp
-ENTRYPOINT terraform init && terraform apply -auto-approve
+ENTRYPOINT ["./entrypoint.sh"]
