@@ -7,7 +7,7 @@ COPY main.py /tmp/main.py
 RUN apk add --no-cache curl jq
 RUN curl https://api.github.com/repos/tailcallhq/tailcall/releases/latest -s | jq .name -r > /tmp/version.txt
 
-FROM python3:latest
+FROM python:latest
 
 COPY --from=builder /tmp/entrypoint.sh /entrypoint.sh
 COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
