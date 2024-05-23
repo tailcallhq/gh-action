@@ -30,6 +30,7 @@ setup_flyctl() {
   curl -L https://fly.io/install.sh | sh
   export FLYCTL_INSTALL="/root/.fly"
   export PATH="$FLYCTL_INSTALL/bin:$PATH"
+  cp /root/.fly/bin/flyctl /usr/local/bin/flyctl
 }
 
 if [ "$PROVIDER" = "aws" ]; then
