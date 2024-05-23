@@ -16,7 +16,8 @@ fi
 export TF_VAR_TAILCALL_VERSION=$TAILCALL_VERSION
 
 get_tailcall_config() {
-  cp "$TAILCALL_CONFIG" .
+  echo $TAILCALL_CONFIG
+  cp $TAILCALL_CONFIG .
 }
 
 setup_terraform() {
