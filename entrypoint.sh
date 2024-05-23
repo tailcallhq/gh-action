@@ -2,7 +2,7 @@
 
 set -e
 
-python main.py "$@"
+python /tmp/main.py "$@"
 export TF_VAR_AWS_REGION=$AWS_REGION
 export TF_VAR_AWS_IAM_ROLE=$AWS_IAM_ROLE
 export TF_VAR_AWS_LAMBDA_FUNCTION_NAME=$AWS_LAMBDA_FUNCTION_NAME
