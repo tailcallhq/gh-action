@@ -22,7 +22,9 @@ setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
   wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
   unzip /tmp/terraform.zip -d /tmp && rm /tmp/terraform.zip
+  ls /tmp
   mv /tmp/*/terraform /aws/terraform
+  ls /aws
   chmod +x /aws/terraform
 }
 
