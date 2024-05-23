@@ -37,7 +37,7 @@ jobs:
           tailcall-config: 'config.graphql'
 ```
 
-> **Note**: The AWS account associated with the `AWS_ACCESS_KEY_ID` and the `AWS_SECRET_ACCESS_KEY` must have the necessary permissions to create IAM role.
+> **Note**: The AWS account associated with the `AWS_ACCESS_KEY_ID` and the `AWS_SECRET_ACCESS_KEY` must have the necessary permissions to create an IAM role.
 
 ### Deployment Steps Overview
 
