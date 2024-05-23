@@ -20,12 +20,10 @@ cp $TAILCALL_CONFIG /fly/config.graphql
 
 setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
-  wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-  unzip /tmp/terraform.zip -d /tmp && rm /tmp/terraform.zip
-  ls /tmp
-  mv /tmp/*/terraform /usr/local/bin/terraform
-  ls /aws
-  chmod +x /aws/terraform
+  echo $TERRAFORM_VERSION
+  wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  unzip terraform.zip && rm terraform.zip
+  mv ./*/terraform /usr/local/bin/terraform
 }
 
 setup_flyctl() {
