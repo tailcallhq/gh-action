@@ -5,22 +5,28 @@ inputs:
     type: object
     required: false
     properties:
-      aws-access-key-id:
+      access-key-id:
         description: 'AWS Access Key ID'
         required: true
         type: string
-      aws-secret-access-key:
+      secret-access-key:
         description: 'AWS Secret Access Key'
         required: true
         type: string
-      aws-region:
+      region:
         description: 'AWS Region'
         required: true
         type: string
-      aws-iam-role:
+      iam-role:
         description: 'AWS IAM Role'
-        required: true
+        required: false
         type: string
+        default: 'iam_for_tailcall'
+      lambda-function-name:
+        description: 'AWS Lambda Function Name'
+        required: false
+        type: string
+        default: 'tailcall'
   fly:
     type: object
     required: false
