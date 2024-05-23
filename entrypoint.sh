@@ -15,10 +15,8 @@ if [ "$TAILCALL_VERSION" = "latest" ]; then
 fi
 export TF_VAR_TAILCALL_VERSION=$TAILCALL_VERSION
 
-get_tailcall_config() {
-  echo $TAILCALL_CONFIG
-  cp $TAILCALL_CONFIG .
-}
+cp $TAILCALL_CONFIG /aws/config.graphql
+cp $TAILCALL_CONFIG /fly/config.graphql
 
 setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
@@ -35,12 +33,10 @@ setup_flyctl() {
 
 if [ "$PROVIDER" = "aws" ]; then
   cd /aws
-  get_tailcall_config
   terraform init
   terraform apply -auto-approve
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
   cd /fly
-  get_tailcall_config
   flyctl deploy
 fi
