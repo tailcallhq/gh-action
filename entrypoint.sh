@@ -19,15 +19,6 @@ get_tailcall_config() {
   cp "$TAILCALL_CONFIG" .
 }
 
-setup_terraform() {
-  curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest \
-      | jq --raw-output .zipball_url \
-      | xargs wget -O /tmp/terraform.zip
-  unzip /tmp/terraform.zip -d /tmp
-  go build
-  mv /tmp/terraform /usr/local/bin/terraform
-}
-
 setup_flyctl() {
   curl -L https://fly.io/install.sh | sh
   export FLYCTL_INSTALL="/root/.fly"
@@ -36,7 +27,6 @@ setup_flyctl() {
 
 if [ "$PROVIDER" = "aws" ]; then
   cd /aws
-  setup_terraform
   get_tailcall_config
   terraform init
   terraform apply -auto-approve
