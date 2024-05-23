@@ -16,4 +16,4 @@ COPY --from=builder /tmp/config.graphql /tmp/config.graphq
 COPY --from=builder /tmp/version.txt /tmp/version.txt
 
 RUN export TAILCALL_VERSION=$(cat /tmp/version.txt)
-ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
