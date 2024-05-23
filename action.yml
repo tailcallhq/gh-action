@@ -35,10 +35,19 @@ inputs:
         description: 'Fly.io API Key'
         required: true
         type: string
+  tailcall-version:
+    description: 'Tailcall version'
+    required: true
+    type: string
+    default: 'latest'
   tailcall-config:
     description: 'Tailcall configuration file'
     required: true
     type: string
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.aws }}
+    - ${{ inputs.fly }}
+    - ${{ inputs.tailcall-config }}
