@@ -20,7 +20,7 @@ cp $TAILCALL_CONFIG /fly/config.graphql
 
 setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
-  echo $TERRAFORM_VERSION
+  TERRAFORM_VERSION="${TERRAFORM_VERSION:1}"
   wget -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
   unzip terraform.zip && rm terraform.zip
   mv ./*/terraform /usr/local/bin/terraform
