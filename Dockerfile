@@ -12,6 +12,5 @@ FROM alpine:latest
 COPY --from=builder /entrypoint.sh /entrypoint.sh
 COPY --from=builder /aws/tailcall.tf /aws/tailcall.tf
 COPY --from=builder /fly/Dockerfile /fly/Dockerfile
-COPY --from=builder /tmp/terraform /usr/local/bin/terraform
 
 ENTRYPOINT /bin/sh /entrypoint.sh
