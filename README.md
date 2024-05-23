@@ -25,7 +25,7 @@ jobs:
     name: Deploy Tailcall
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Deploy Tailcall
         id: deploy-tailcall
         uses: tailcallhq/gh-action@a629949cab3e55b0f3a3989fc3bcdd9a7ac3a482
