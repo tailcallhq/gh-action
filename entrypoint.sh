@@ -27,7 +27,7 @@ setup_terraform() {
 }
 
 setup_flyctl() {
-  EXPORT_COMMANDS=(curl -L https://fly.io/install.sh | sh | tail -n 2)
+  EXPORT_COMMANDS=$(curl -L https://fly.io/install.sh | sh | tail -n 2)
   echo $EXPORT_COMMANDS
   eval $EXPORT_COMMANDS
 }
