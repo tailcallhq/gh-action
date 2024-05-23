@@ -21,7 +21,7 @@ get_tailcall_config() {
 
 setup_terraform() {
   curl -s https://api.github.com/repos/tailcallhq/tailcall/releases/latest \
-      | jq --raw_output .zipball_url \
+      | jq --raw-output .zipball_url \
       | xargs wget -O /tmp/terraform.zip
   unzip /tmp/terraform.zip -d /tmp
   go build
