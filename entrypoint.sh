@@ -23,6 +23,7 @@ setup_terraform() {
   wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
   unzip /tmp/terraform.zip -d /tmp && rm /tmp/terraform.zip
   mv /tmp/*/terraform /usr/local/bin/terraform
+  chmod +x /usr/local/bin/terraform
 }
 
 setup_flyctl() {
