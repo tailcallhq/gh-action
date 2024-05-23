@@ -1,15 +1,11 @@
 FROM alpine:latest as builder
 
-COPY entrypoint.sh /tmp/entrypoint.sh
-COPY tailcall.tf /tmp/tailcall.tf
+COPY entrypoint.sh /entrypoint.sh
+COPY aws/tailcall.tf /aws/tailcall.tf
+COPY Dockerfile_fly /fly/Dockerfile
 
-RUN apk add --no-cache curl jq
-RUN curl https://api.github.com/repos/tailcallhq/tailcall/releases/latest -s | jq .name -r > /tmp/version.txt
+RUN apk upgrade --no-cache && apk update --no-cache
 
-FROM hashicorp/terraform:latest
+RUN apk add --no-cache curl jq libc6-compat git openssh-client python py-pip python3 && pip install awscli
 
-COPY --from=builder /tmp/entrypoint.sh /entrypoint.sh
-COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
-COPY --from=builder /tmp/version.txt /version.txt
-
-ENTRYPOINT /bin/sh /entrypoint.sh "$(cat /version.txt)"
+ENTRYPOINT /bin/sh /entrypoint.sh

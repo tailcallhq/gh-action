@@ -1,38 +1,46 @@
-# action.yml
-name: 'Deploy tailcall'
-description: 'Deploy tailcall from a config'
+name: 'Tailcall Deploy Action'
+description: 'Deploy Tailcall application with AWS and Fly.io configurations'
 inputs:
+  provider:
+    description: 'Cloud Provider'
+    required: true
   aws-access-key-id:
-    description: 'AWS_ACCESS_KEY_ID'
+    description: 'AWS Access Key ID'
     required: true
   aws-secret-access-key:
-    description: 'AWS_SECRET_ACCESS_KEY'
+    description: 'AWS Secret Access Key'
     required: true
   aws-region:
-    description: 'AWS_REGION'
+    description: 'AWS Region'
     required: true
   aws-iam-role:
-    description: 'AWS_IAM_ROLE'
+    description: 'AWS IAM Role'
+    required: false
     default: 'iam_for_tailcall'
-    required: false
   aws-lambda-function-name:
-    description: 'AWS_LAMBDA_FUNCTION_NAME'
-    default: 'tailcall'
+    description: 'AWS Lambda Function Name'
     required: false
+    default: 'tailcall'
+  fly-api-token:
+    description: 'Fly.io API token'
+    required: true
   tailcall-version:
     description: 'Tailcall version'
+    required: true
     default: 'latest'
   tailcall-config:
-    description: 'Tailcall config'
+    description: 'Tailcall configuration file'
     required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
   env:
+    PROVIDER: ${{ inputs.provider }}
     AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
     AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
     AWS_REGION: ${{ inputs.aws-region }}
     AWS_IAM_ROLE: ${{ inputs.aws-iam-role }}
     AWS_LAMBDA_FUNCTION_NAME: ${{ inputs.aws-lambda-function-name }}
-    TAILCALL_CONFIG: ${{ inputs.tailcall-config }}
+    FLY_API_TOKEN: ${{ inputs.fly-api-token }}
     TAILCALL_VERSION: ${{ inputs.tailcall-version }}
+    TAILCALL_CONFIG: ${{ inputs.tailcall-config }}
