@@ -1,0 +1,14 @@
+{
+  "name": "gh-action",
+  "version": "1.0.0",
+  "description": "A GitHub Action for deploying a [tailcall](https://tailcall.run) server on AWS Lambda, using terraform.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.10.1"
+  }
+}
