@@ -23,7 +23,7 @@ setup_terraform() {
   wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
   unzip /tmp/terraform.zip -d /tmp && rm /tmp/terraform.zip
   ls /tmp
-  mv /tmp/*/terraform /aws/terraform
+  mv /tmp/*/terraform /usr/local/bin/terraform
   ls /aws
   chmod +x /aws/terraform
 }
@@ -36,8 +36,9 @@ setup_flyctl() {
 
 if [ "$PROVIDER" = "aws" ]; then
   cd /aws
-  ./terraform init
-  ./terraform apply -auto-approve
+  setup_terraform
+  terraform init
+  terraform apply -auto-approve
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
   cd /fly
