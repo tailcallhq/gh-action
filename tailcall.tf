@@ -27,7 +27,13 @@ variable "TAILCALL_VERSION" {
   type = string
 }
 
-provider "aws" { region = var.AWS_REGION }
+provider "aws" {
+  region = var.AWS_REGION
+}
+
+data "aws_iam_role" "existing_role" {
+  name = var.AWS_IAM_ROLE
+}
 
 data "aws_iam_policy_document" "assume_role" {
   statement {
@@ -43,6 +49,8 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "iam_for_tailcall" {
+  count = data.aws_iam_role.existing_role.arn == "" ? 1 : 0
+
   name               = var.AWS_IAM_ROLE
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
@@ -53,7 +61,7 @@ data "github_release" "tailcall" {
   owner       = "tailcallhq"
   repository  = "tailcall"
   retrieve_by = "tag"
-  release_tag = "${var.TAILCALL_VERSION}"
+  release_tag = var.TAILCALL_VERSION
 }
 
 data "http" "bootstrap" {
@@ -71,7 +79,6 @@ resource "local_sensitive_file" "config" {
 }
 
 data "archive_file" "tailcall" {
-
   depends_on = [
     local_sensitive_file.bootstrap,
     local_sensitive_file.config
@@ -86,7 +93,7 @@ resource "aws_lambda_function" "tailcall" {
     data.archive_file.tailcall
   ]
 
-  role             = aws_iam_role.iam_for_tailcall.arn
+  role             = coalesce(data.aws_iam_role.existing_role.arn, aws_iam_role.iam_for_tailcall[0].arn)
   function_name    = var.AWS_LAMBDA_FUNCTION_NAME
   runtime          = "provided.al2"
   architectures    = ["x86_64"]
@@ -114,10 +121,9 @@ resource "aws_api_gateway_method" "proxy" {
 }
 
 resource "aws_api_gateway_integration" "lambda" {
-  rest_api_id = aws_api_gateway_rest_api.tailcall.id
-  resource_id = aws_api_gateway_method.proxy.resource_id
-  http_method = aws_api_gateway_method.proxy.http_method
-
+  rest_api_id             = aws_api_gateway_rest_api.tailcall.id
+  resource_id             = aws_api_gateway_method.proxy.resource_id
+  http_method             = aws_api_gateway_method.proxy.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.tailcall.invoke_arn
@@ -132,10 +138,9 @@ resource "aws_api_gateway_method" "proxy_root" {
 }
 
 resource "aws_api_gateway_integration" "lambda_root" {
-  rest_api_id = aws_api_gateway_rest_api.tailcall.id
-  resource_id = aws_api_gateway_method.proxy_root.resource_id
-  http_method = aws_api_gateway_method.proxy_root.http_method
-
+  rest_api_id             = aws_api_gateway_rest_api.tailcall.id
+  resource_id             = aws_api_gateway_method.proxy_root.resource_id
+  http_method             = aws_api_gateway_method.proxy_root.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.tailcall.invoke_arn
@@ -170,8 +175,6 @@ resource "aws_lambda_permission" "apigw" {
   function_name = aws_lambda_function.tailcall.function_name
   principal     = "apigateway.amazonaws.com"
 
-  # The /*/* portion grants access from any method on any resource
-  # within the API Gateway "REST API".
   source_arn = "${aws_api_gateway_rest_api.tailcall.execution_arn}/*/*"
 }
 
