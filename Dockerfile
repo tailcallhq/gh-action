@@ -13,5 +13,4 @@ COPY --from=builder /tmp/entrypoint.sh /entrypoint.sh
 COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
 COPY --from=builder /tmp/version.txt /version.txt
 
-RUN export LATEST_TAILCALL_VERSION=$(cat /version.txt)
-ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
+ENTRYPOINT LATEST_TAILCALL_VERSION=$(cat /version.txt) /bin/sh /entrypoint.sh
