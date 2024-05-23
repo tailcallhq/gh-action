@@ -6,11 +6,14 @@ COPY $TAILCALL_CONFIG /tmp/config.graphql
 
 RUN apk add --no-cache curl jq
 RUN if [ "$TAILCALL_VERSION" = "latest" ]; then TAILCALL_VERSION=$(curl https://api.github.com/repos/tailcallhq/tailcall/releases/latest -s | jq .name -r); fi
+RUN echo $TAILCALL_VERSION > /tmp/version.txt
 
 FROM hashicorp/terraform:latest
 
 COPY --from=builder /entrypoint.sh /entrypoint.sh
 COPY --from=builder /tmp/tailcall.tf /tmp/tailcall.tf
-COPY --from=builder /tmp/config.graphql /tmp/config.graphql
+COPY --from=builder /tmp/config.graphql /tmp/config.graphq
+COPY --from=builder /tmp/version.txt /tmp/version.txt
 
-ENTRYPOINT ["./entrypoint.sh"]
+RUN export TAILCALL_VERSION=$(cat /tmp/version.txt)
+ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]
