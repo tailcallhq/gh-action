@@ -40,5 +40,5 @@ if [ "$PROVIDER" = "aws" ]; then
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
   cd /fly
-  flyctl deploy
+  flyctl lauch
 fi
