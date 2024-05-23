@@ -5,7 +5,13 @@ COPY aws/tailcall.tf /aws/tailcall.tf
 COPY fly/Dockerfile /fly/Dockerfile
 
 RUN apk upgrade --no-cache && apk update --no-cache
+RUN apk add --no-cache curl jq go
 
-RUN apk add --no-cache curl jq libc6-compat git openssh-client python py-pip python3 && pip install awscli
+FROM alpine:latest
+
+COPY --from=builder /entrypoint.sh /entrypoint.sh
+COPY --from=builder /aws/tailcall.tf /aws/tailcall.tf
+COPY --from=builder /fly/Dockerfile /fly/Dockerfile
+COPY --from=builder /tmp/terraform /usr/local/bin/terraform
 
 ENTRYPOINT /bin/sh /entrypoint.sh

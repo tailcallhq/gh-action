@@ -20,11 +20,12 @@ get_tailcall_config() {
 }
 
 setup_terraform() {
-  TERRAFORM_VERSION=$(get_latest_release hashicorp terraform)
-  cd /usr/local/bin
-  curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-  unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
-  rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  curl -s https://api.github.com/repos/tailcallhq/tailcall/releases/latest \
+      | jq --raw_output .zipball_url \
+      | xargs wget -O /tmp/terraform.zip
+  unzip /tmp/terraform.zip -d /tmp
+  go build
+  mv /tmp/terraform /usr/local/bin/terraform
 }
 
 setup_flyctl() {
@@ -34,13 +35,13 @@ setup_flyctl() {
 }
 
 if [ "$PROVIDER" = "aws" ]; then
-  install_terraform
   cd /aws
+  setup_terraform
   get_tailcall_config
   terraform init
   terraform apply -auto-approve
 elif [ "$PROVIDER" = "fly" ]; then
-  install_flyctl
+  setup_flyctl
   cd /fly
   get_tailcall_config
   flyctl deploy
