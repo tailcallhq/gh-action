@@ -39,10 +39,6 @@ provider "aws" {
   region = var.AWS_REGION
 }
 
-data "aws_iam_role" "existing_role" {
-  name = var.AWS_IAM_ROLE
-}
-
 data "aws_iam_policy_document" "assume_role" {
   statement {
     effect = "Allow"
@@ -57,8 +53,6 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "iam_for_tailcall" {
-  count = data.aws_iam_role.existing_role.arn == "" ? 1 : 0
-
   name               = var.AWS_IAM_ROLE
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
@@ -101,7 +95,7 @@ resource "aws_lambda_function" "tailcall" {
     data.archive_file.tailcall
   ]
 
-  role             = length(data.aws_iam_role.existing_role.arn) > 0 ? data.aws_iam_role.existing_role.arn : aws_iam_role.iam_for_tailcall[0].arn
+  role             = aws_iam_role.iam_for_tailcall.arn
   function_name    = var.AWS_LAMBDA_FUNCTION_NAME
   runtime          = "provided.al2"
   architectures    = ["x86_64"]
