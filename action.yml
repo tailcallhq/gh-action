@@ -30,6 +30,9 @@ inputs:
   fly-app-name:
     description: 'Fly.io App Name'
     required: true
+  fly-config-toml:
+    description: 'Fly.io configuration file'
+    required: false
   tailcall-version:
     description: 'Tailcall version'
     required: true
@@ -50,5 +53,6 @@ runs:
     TERRAFORM_API_TOKEN: ${{ inputs.terraform-api-token }}
     FLY_API_TOKEN: ${{ inputs.fly-api-token }}
     FLY_APP_NAME: ${{ inputs.fly-app-name }}
+    FLY_CONFIG_TOML: ${{ inputs.fly-config-toml }}
     TAILCALL_VERSION: ${{ inputs.tailcall-version }}
     TAILCALL_CONFIG: ${{ inputs.tailcall-config }}

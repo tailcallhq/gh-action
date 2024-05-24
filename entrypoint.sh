@@ -20,6 +20,7 @@ export TF_VAR_TAILCALL_VERSION=$TAILCALL_VERSION
 
 cp $TAILCALL_CONFIG /aws/config.graphql
 cp $TAILCALL_CONFIG /fly/config.graphql
+cp $FLY_CONFIG_TOML /fly/fly.toml
 
 setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
