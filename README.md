@@ -14,6 +14,7 @@ A GitHub Action for deploying a [tailcall](https://tailcall.run) server on AWS L
 | `aws-region`               | The AWS region where the Lambda function will be deployed (e.g., `us-east-1`).                                                    |
 | `aws-iam-role`             | The IAM role name to be created and used for the deployment. If not specified, defaults to `iam_for_tailcall`.                    |
 | `aws-lambda-function-name` | The name assigned to the created Lambda function. Defaults to `tailcall` if not specified.                                        |
+| `terraform-api-token`      | The Terraform Cloud API token required for authentication. Ensure this value is stored securely, such as in GitHub Secrets.       |
 | `fly-api-token`            | The Fly API token required for authentication. Ensure this value is stored securely, such as in GitHub Secrets.                   |
 | `fly-app-name`             | The name of the Fly app to deploy the server to. Defaults to `tailcall` if not specified.                                         |
 
@@ -40,6 +41,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
           aws-region: "us-east-1"
           aws-iam-role: "iam_for_tailcall"
+          terraform-api-token: ${{ secrets.TERRAFORM_API_TOKEN }}
           tailcall-config: 'config.graphql'
 ```
 
