@@ -27,6 +27,14 @@ variable "AWS_IAM_ROLE" {
   type = string
 }
 
+variable "AWS_ACCESS_KEY_ID" {
+  type = string
+}
+
+variable "AWS_SECRET_ACCESS_KEY" {
+  type = string
+}
+
 variable "AWS_LAMBDA_FUNCTION_NAME" {
   type = string
 }
@@ -37,6 +45,8 @@ variable "TAILCALL_VERSION" {
 
 provider "aws" {
   region = var.AWS_REGION
+  access_key = var.AWS_ACCESS_KEY_ID
+  secret_key = var.AWS_SECRET_ACCESS_KEY
 }
 
 data "aws_iam_policy_document" "assume_role" {
