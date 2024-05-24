@@ -40,5 +40,5 @@ if [ "$PROVIDER" = "aws" ]; then
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
   cd /fly
-  flyctl launch
+  flyctl launch --name $FLY_APP_NAME
 fi
