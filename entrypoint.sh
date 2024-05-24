@@ -43,5 +43,5 @@ if [ "$PROVIDER" = "aws" ]; then
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
   cd /fly
-  flyctl launch --name $FLY_APP_NAME
+  flyctl launch --name $FLY_APP_NAME --copy-config
 fi
