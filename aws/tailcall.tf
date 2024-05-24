@@ -35,10 +35,6 @@ variable "TAILCALL_VERSION" {
   type = string
 }
 
-variable "TERRAFORM_API_TOKEN" {
-  type = string
-}
-
 provider "aws" {
   region = var.AWS_REGION
 }
