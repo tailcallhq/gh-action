@@ -9,6 +9,18 @@ terraform {
       version = "6.0.0-beta"
     }
   }
+
+  cloud {
+    organization = "tailcall-test"
+
+    workspaces {
+      name = "tailcall"
+    }
+  }
+}
+
+credentials "app.terraform.io" {
+  token = var.TERRAFORM_API_TOKEN
 }
 
 variable "AWS_REGION" {
@@ -24,6 +36,10 @@ variable "AWS_LAMBDA_FUNCTION_NAME" {
 }
 
 variable "TAILCALL_VERSION" {
+  type = string
+}
+
+variable "TERRAFORM_API_TOKEN" {
   type = string
 }
 

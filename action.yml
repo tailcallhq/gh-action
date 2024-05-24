@@ -21,6 +21,9 @@ inputs:
     description: 'AWS Lambda Function Name'
     required: false
     default: 'tailcall'
+  terraform-api-token:
+    description: 'Terraform API token'
+    required: false
   fly-api-token:
     description: 'Fly.io API token'
     required: true
@@ -44,6 +47,7 @@ runs:
     AWS_REGION: ${{ inputs.aws-region }}
     AWS_IAM_ROLE: ${{ inputs.aws-iam-role }}
     AWS_LAMBDA_FUNCTION_NAME: ${{ inputs.aws-lambda-function-name }}
+    TERRAFORM_API_TOKEN: ${{ inputs.terraform-api-token }}
     FLY_API_TOKEN: ${{ inputs.fly-api-token }}
     FLY_APP_NAME: ${{ inputs.fly-app-name }}
     TAILCALL_VERSION: ${{ inputs.tailcall-version }}
