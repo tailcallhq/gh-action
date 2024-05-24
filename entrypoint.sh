@@ -28,8 +28,8 @@ setup_terraform() {
 
 setup_flyctl() {
   curl -L https://fly.io/install.sh | sh
-  ls $HOME/.fly/bin
-  export PATH=$PATH:/github/home/.fly/bin
+  export PATH=$PATH:$HOME/.fly/bin
+  echo $PATH
 }
 
 if [ "$PROVIDER" = "aws" ]; then
