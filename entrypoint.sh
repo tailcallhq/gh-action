@@ -21,10 +21,6 @@ export TF_VAR_TAILCALL_VERSION=$TAILCALL_VERSION
 cp $TAILCALL_CONFIG /aws/config.graphql
 cp $TAILCALL_CONFIG /fly/config.graphql
 
-if [ -z "$FLY_CONFIG_TOML" ]; then
-  cp $FLY_CONFIG_TOML /fly/fly.toml
-fi
-
 setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
   TERRAFORM_VERSION="${TERRAFORM_VERSION:1}"
@@ -46,5 +42,5 @@ if [ "$PROVIDER" = "aws" ]; then
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
   cd /fly
-  flyctl launch --name $FLY_APP_NAME --copy-config
+  flyctl launch --name $FLY_APP_NAME --region $FLY_REGION_CODE
 fi

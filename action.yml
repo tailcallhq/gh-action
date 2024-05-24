@@ -53,6 +53,6 @@ runs:
     TERRAFORM_API_TOKEN: ${{ inputs.terraform-api-token }}
     FLY_API_TOKEN: ${{ inputs.fly-api-token }}
     FLY_APP_NAME: ${{ inputs.fly-app-name }}
-    FLY_CONFIG_TOML: ${{ inputs.fly-config-toml }}
+    FLY_REGION_CODE: ${{ inputs.fly-region-code }}
     TAILCALL_VERSION: ${{ inputs.tailcall-version }}
     TAILCALL_CONFIG: ${{ inputs.tailcall-config }}
