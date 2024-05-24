@@ -19,10 +19,6 @@ terraform {
   }
 }
 
-credentials "app.terraform.io" {
-  token = var.TERRAFORM_API_TOKEN
-}
-
 variable "AWS_REGION" {
   type = string
 }
