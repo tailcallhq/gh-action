@@ -38,7 +38,6 @@ if [ "$PROVIDER" = "aws" ]; then
   cd /aws
   setup_terraform
   terraform init
-  terraform plan
   terraform apply -auto-approve
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
