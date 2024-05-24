@@ -28,7 +28,7 @@ setup_terraform() {
 
 setup_flyctl() {
   curl -L https://fly.io/install.sh | sh
-  ls /github/home/.fly/bin
+  ls $HOME/.fly/bin
   export PATH=$PATH:/github/home/.fly/bin
 }
 
