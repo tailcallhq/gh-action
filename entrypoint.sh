@@ -40,7 +40,7 @@ setup_flyctl() {
 if [ "$PROVIDER" = "aws" ]; then
   cd /aws
   setup_terraform
-  python replace.py "var.TERRAFORM_ORG" "$TERRAFORM_ORG" "var.TERRAFORM_WORKSPACE" "$TERRAFORM_WORKSPACE"
+  python replace.py "var.TERRAFORM_ORG" "\"$TERRAFORM_ORG\"" "var.TERRAFORM_WORKSPACE" "\"$TERRAFORM_WORKSPACE\""
   terraform init
   terraform apply -auto-approve
 elif [ "$PROVIDER" = "fly" ]; then
