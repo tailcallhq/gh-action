@@ -11,10 +11,10 @@ terraform {
   }
 
   cloud {
-    organization = "tailcall-test"
+    organization = var.TERRAFORM_ORG
 
     workspaces {
-      name = "tailcall"
+      name = var.TERRAFORM_WORKSPACE
     }
   }
 }
@@ -41,6 +41,14 @@ variable "AWS_LAMBDA_FUNCTION_NAME" {
 
 variable "TAILCALL_VERSION" {
   type = string
+}
+
+variable "TERRAFORM_ORG" {
+    type = string
+}
+
+variable "TERRAFORM_WORKSPACE" {
+    type = string
 }
 
 provider "aws" {
