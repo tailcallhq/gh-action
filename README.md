@@ -45,6 +45,8 @@ jobs:
           aws-region: "us-east-1"
           aws-iam-role: "iam_for_tailcall"
           terraform-api-token: ${{ secrets.TERRAFORM_API_TOKEN }}
+          terraform-org: 'tailcall-demo'
+          terraform-workspace: 'tailcall'
           tailcall-config: 'config.graphql'
 ```
 
