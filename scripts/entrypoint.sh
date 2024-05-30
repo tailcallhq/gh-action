@@ -51,7 +51,7 @@ setup_flyctl() {
 }
 
 extract_urls() {
-  grep -oE 'http[s]?://[^ ]+'
+  grep -oE 'http[s]?://[^ "]+'
 }
 
 deploy() {
@@ -74,5 +74,4 @@ deploy() {
 deploy | tee /tmp/deployment.log
 
 DEPLOYMENT_URL=$(cat /tmp/deployment.log | extract_urls | tail -n 1)
-echo "$DEPLOYMENT_URL"
 /scripts/health-check.sh "$DEPLOYMENT_URL"
