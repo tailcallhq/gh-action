@@ -1,6 +1,6 @@
 FROM alpine:latest as builder
 
-COPY config.graphql /config.graphql
+COPY . /app
 
 RUN apk upgrade --no-cache && apk update --no-cache && apk add --no-cache curl jq wget
 RUN export TAILCALL_DOWNLOAD_URL=$(curl -s https://api.github.com/repos/tailcallhq/tailcall/releases/latest \
@@ -10,7 +10,7 @@ RUN export TAILCALL_DOWNLOAD_URL=$(curl -s https://api.github.com/repos/tailcall
 
 FROM alpine:latest
 
-COPY --from=builder /config.graphql /config.graphql
+COPY --from=builder /app /app
 COPY --from=builder /usr/local/bin/tailcall /usr/local/bin/tailcall
 
-CMD TC_TRACKER=false tailcall start /config.graphql
+CMD TC_TRACKER=false tailcall start /config.json
