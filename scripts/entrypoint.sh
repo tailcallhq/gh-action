@@ -74,4 +74,4 @@ deploy() {
 deploy | tee /tmp/deployment.log
 
 DEPLOYMENT_URL=$(cat /tmp/deployment.log | extract_urls | tail -n 1)
-/scripts/introspect.sh "$DEPLOYMENT_URL" && echo "Health check passed." || echo "Health check failed."
+/scripts/health-check.sh "$DEPLOYMENT_URL"
