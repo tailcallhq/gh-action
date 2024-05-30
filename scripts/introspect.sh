@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -l
 set -e
 
 curl --location $1 \
