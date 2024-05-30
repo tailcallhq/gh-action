@@ -71,9 +71,9 @@ deploy() {
   fi
 }
 
-deploy
+deploy | tee /tmp/deployment.log
 
-DEPLOYMENT_URLS=$(echo "$!!" | extract_urls)
+DEPLOYMENT_URLS=$(cat /tmp/deployment.log | extract_urls)
 echo "$DEPLOYMENT_URLS"
 DEPLOYMENT_URL=$(echo "$DEPLOYMENT_URLS" | tail -n 1)
 echo $DEPLOYMENT_URL
