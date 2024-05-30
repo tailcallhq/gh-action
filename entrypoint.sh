@@ -2,10 +2,23 @@
 
 set -e
 
+setup_tailcall() {
+  export TAILCALL_DOWNLOAD_URL=$(curl -s https://api.github.com/repos/tailcallhq/tailcall/releases/latest \
+        | jq --raw-output --arg arch $(arch) '.assets | map(select(.name | (contains($arch) and endswith("musl")))) | first | .browser_download_url')
+  wget -O /usr/local/bin/tailcall $TAILCALL_DOWNLOAD_URL
+  chmod +x /usr/local/bin/tailcall
+}
+
+validate_tailcall_config() {
+  setup_tailcall
+  TC_TRACER=false tailcall check $TAILCALL_CONFIG
+}
+
 get_latest_version() {
   curl https://api.github.com/repos/$1/$2/releases/latest -s | jq .name -r
 }
 
+validate_tailcall_config
 export TF_VAR_AWS_REGION=$AWS_REGION
 export TF_VAR_AWS_IAM_ROLE=$AWS_IAM_ROLE
 export TF_VAR_AWS_LAMBDA_FUNCTION_NAME=$AWS_LAMBDA_FUNCTION_NAME
@@ -40,11 +53,15 @@ setup_flyctl() {
 if [ "$PROVIDER" = "aws" ]; then
   cd /aws
   setup_terraform
-  python replace.py "var.TERRAFORM_ORG" "\"$TERRAFORM_ORG\"" "var.TERRAFORM_WORKSPACE" "\"$TERRAFORM_WORKSPACE\""
+  awk '{sub(/var.TERRAFORM_ORG/,"\"$TERRAFORM_ORG\"")}1' tailcall.tf > /tmp/temp1.tf
+  awk '{sub(/var.TERRAFORM_WORKSPACE/,"\"$TERRAFORM_WORKSPACE\"")}1' /tmp/temp1.tf > /tmp/temp2.tf
+  mv /tmp/temp2.tf tailcall.tf
   terraform init
   terraform apply -auto-approve
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
+  awk '{sub(/<app-name>/,"\"$TERRAFORM_ORG\"")}1' tailcall.tf > /tmp/temp1.tf
   cd /fly
-  flyctl launch --name $FLY_APP_NAME --region $FLY_REGION
+  fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null || fly apps create $FLY_APP_NAME
+  flyctl deploy --app $FLY_APP_NAME --region $FLY_REGION --local-only
 fi

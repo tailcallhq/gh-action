@@ -4,15 +4,22 @@ inputs:
   provider:
     description: 'Cloud Provider'
     required: true
+  tailcall-config:
+    description: 'Tailcall configuration file'
+    required: true
+  tailcall-version:
+    description: 'Tailcall version'
+    required: false
+    default: 'latest'
   aws-access-key-id:
     description: 'AWS Access Key ID'
-    required: true
+    required: false
   aws-secret-access-key:
     description: 'AWS Secret Access Key'
-    required: true
+    required: false
   aws-region:
     description: 'AWS Region'
-    required: true
+    required: false
   aws-iam-role:
     description: 'AWS IAM Role'
     required: false
@@ -32,21 +39,14 @@ inputs:
     required: false
   fly-api-token:
     description: 'Fly.io API token'
-    required: true
+    required: false
   fly-app-name:
     description: 'Fly.io App Name'
-    required: true
+    required: false
   fly-region:
     description: 'Fly.io Region'
     required: false
     default: 'ord'
-  tailcall-version:
-    description: 'Tailcall version'
-    required: true
-    default: 'latest'
-  tailcall-config:
-    description: 'Tailcall configuration file'
-    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
