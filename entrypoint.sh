@@ -61,6 +61,6 @@ if [ "$PROVIDER" = "aws" ]; then
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
   cd /fly
-  fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null || fly apps create $FLY_APP_NAME
-  flyctl deploy --app $FLY_APP_NAME --regions $FLY_REGION --local-only
+  fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME
+  flyctl launch --app $FLY_APP_NAME --region $FLY_REGION --local-only
 fi
