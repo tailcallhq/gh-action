@@ -13,4 +13,4 @@ FROM alpine:latest
 COPY --from=builder /config.graphql /config.graphql
 COPY --from=builder /usr/local/bin/tailcall /usr/local/bin/tailcall
 
-CMD tailcall start /config.graphql
+CMD TC_TRACKER=false tailcall start /config.graphql
