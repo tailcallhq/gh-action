@@ -50,17 +50,28 @@ setup_flyctl() {
   export PATH=$PATH:$HOME/.fly/bin
 }
 
-if [ "$PROVIDER" = "aws" ]; then
-  cd /aws
-  setup_terraform
-  awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" tailcall.tf > /tmp/temp1.tf
-  awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
-  mv /tmp/temp2.tf tailcall.tf
-  terraform init
-  terraform apply -auto-approve
-elif [ "$PROVIDER" = "fly" ]; then
-  setup_flyctl
-  cd /fly
-  fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
-  flyctl launch --name $FLY_APP_NAME --region $FLY_REGION --local-only
-fi
+extract_urls() {
+  grep -oE 'http[s]?://[^ ]+'
+}
+
+deploy() {
+  if [ "$PROVIDER" = "aws" ]; then
+    cd /aws
+    setup_terraform
+    awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" tailcall.tf > /tmp/temp1.tf
+    awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
+    mv /tmp/temp2.tf tailcall.tf
+    terraform init
+    terraform apply -auto-approve
+  elif [ "$PROVIDER" = "fly" ]; then
+    setup_flyctl
+    cd /fly
+    fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
+    flyctl launch --name $FLY_APP_NAME --region $FLY_REGION --local-only
+  fi
+}
+
+deploy
+
+DEPLOYMENT_URL=$(echo "$!!" | extract_urls | tail -n 1)
+/scripts/introspect.sh $DEPLOYMENT_URL && echo "Deployment successful"
