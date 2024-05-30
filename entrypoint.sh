@@ -53,8 +53,8 @@ setup_flyctl() {
 if [ "$PROVIDER" = "aws" ]; then
   cd /aws
   setup_terraform
-  awk -v org=$TERRAFORM_ORG "{sub(/var.TERRAFORM_ORG/,org)}1" tailcall.tf > /tmp/temp1.tf
-  awk -v workspace=$TERRAFORM_WORKSPACE "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
+  awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" tailcall.tf > /tmp/temp1.tf
+  awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
   mv /tmp/temp2.tf tailcall.tf
   terraform init
   terraform apply -auto-approve
