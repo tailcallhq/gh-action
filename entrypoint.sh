@@ -53,14 +53,13 @@ setup_flyctl() {
 if [ "$PROVIDER" = "aws" ]; then
   cd /aws
   setup_terraform
-  awk '{sub(/var.TERRAFORM_ORG/,"\"$TERRAFORM_ORG\"")}1' tailcall.tf > /tmp/temp1.tf
-  awk '{sub(/var.TERRAFORM_WORKSPACE/,"\"$TERRAFORM_WORKSPACE\"")}1' /tmp/temp1.tf > /tmp/temp2.tf
+  awk "{sub(/var.TERRAFORM_ORG/,\"\"$TERRAFORM_ORG\"\")}1" tailcall.tf > /tmp/temp1.tf
+  awk "{sub(/var.TERRAFORM_WORKSPACE/,\"\"$TERRAFORM_WORKSPACE\"\")}1" /tmp/temp1.tf > /tmp/temp2.tf
   mv /tmp/temp2.tf tailcall.tf
   terraform init
   terraform apply -auto-approve
 elif [ "$PROVIDER" = "fly" ]; then
   setup_flyctl
-  awk '{sub(/<app-name>/,"\"$TERRAFORM_ORG\"")}1' tailcall.tf > /tmp/temp1.tf
   cd /fly
   fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null || fly apps create $FLY_APP_NAME
   flyctl deploy --app $FLY_APP_NAME --region $FLY_REGION --local-only
