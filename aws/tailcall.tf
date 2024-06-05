@@ -94,8 +94,9 @@ resource "local_sensitive_file" "bootstrap" {
 }
 
 resource "local_sensitive_file" "config" {
-  content_base64 = filebase64("config.graphql")
-  filename       = "config/config.graphql"
+  for_each = fileset("/config", "**")
+  content_base64 = filebase64("${each.value}")
+  filename       = "config/${each.value}"
 }
 
 data "archive_file" "tailcall" {

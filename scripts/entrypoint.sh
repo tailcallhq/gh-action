@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash -l
 
 set -e
 
@@ -18,6 +18,21 @@ get_latest_version() {
   curl https://api.github.com/repos/$1/$2/releases/latest -s | jq .name -r
 }
 
+cp -r . /app
+TC_CONFIG_DIR=/app
+for val in $(echo $TAILCALL_CONFIG | tr '/' '\n'); do
+  if [ "$val" = "." ]; then
+    continue
+  fi
+  if [[ "$val" == *".graphql" || "$val" == *".json" || "$val" == *".yml" ]]; then
+    TC_CONFIG_NAME=$val
+    EXTENSION=$(echo $val | tr '.' '\n' | tail -n 1)
+    break
+  fi
+done
+
+mv "$TC_CONFIG_DIR/$TC_CONFIG_NAME" "$TC_CONFIG_DIR/config.$EXTENSION"
+export TAILCALL_CONFIG=$TC_CONFIG_DIR
 validate_tailcall_config
 export TF_VAR_AWS_REGION=$AWS_REGION
 export TF_VAR_AWS_IAM_ROLE=$AWS_IAM_ROLE
@@ -34,9 +49,6 @@ if [ "$TAILCALL_VERSION" = "latest" ]; then
 fi
 export TF_VAR_TAILCALL_VERSION=$TAILCALL_VERSION
 
-cp $TAILCALL_CONFIG /aws/config.graphql
-cp $TAILCALL_CONFIG /fly/config.graphql
-echo "Config Path: $TAILCALL_CONFIG"
 
 setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
@@ -57,7 +69,8 @@ extract_urls() {
 
 deploy() {
   if [ "$PROVIDER" = "aws" ]; then
-    cd /aws
+    # todo: handle name collisions
+    cp -r /aws /app
     setup_terraform
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
@@ -65,9 +78,10 @@ deploy() {
     terraform init
     terraform apply -auto-approve
   elif [ "$PROVIDER" = "fly" ]; then
+    # todo: handle name collisions
+    cp -r /fly /app
     setup_flyctl
-    cd /fly
-    fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
+    fly apps list | tail -n +2 | awk '{print $1}' | grep -w $FLY_APP_NAME > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
     flyctl launch --name $FLY_APP_NAME --region $FLY_REGION --local-only
   fi
 }
