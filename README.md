@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Deploy Tailcall
         id: deploy-tailcall
-        uses: tailcallhq/gh-action@v0.2
+        uses: tailcallhq/gh-action@v0.1
         with:
           provider: 'aws'
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Deploy Tailcall
         id: deploy-tailcall
-        uses: tailcallhq/gh-action@v0.2
+        uses: tailcallhq/gh-action@v0.1
         with:
           provider: 'fly'
           fly-api-token: ${{ secrets.FLY_API_TOKEN }} 
