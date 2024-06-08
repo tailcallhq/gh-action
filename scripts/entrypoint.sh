@@ -70,7 +70,8 @@ create_fly_toml() {
   toml add_section --toml-path fly.toml http_service
   export PORT=$(rg -o '@server\([^)]*port:\s*(\d+)[^)]*\)' --replace '$1' $TAILCALL_CONFIG || echo 8080)
   echo "PORT: $PORT"
-  toml set --toml-path fly.toml http_service.internal_port $PORT
+  toml set --toml-path fly.toml http_service.internal_port $PORT --to-int
+  cat fly.toml
 }
 
 deploy() {
