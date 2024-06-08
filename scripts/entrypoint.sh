@@ -19,7 +19,7 @@ get_latest_version() {
   curl https://api.github.com/repos/$1/$2/releases/latest -s | jq .name -r
 }
 
-cp -r . /app
+cp -r ./* /app
 TC_CONFIG_DIR_ROOT=/app
 TC_CONFIG_DIR=$(dirname $TAILCALL_CONFIG)
 TC_CONFIG_NAME=$(basename $TAILCALL_CONFIG)
