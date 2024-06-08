@@ -77,7 +77,7 @@ create_fly_toml() {
 deploy() {
   if [ "$PROVIDER" = "aws" ]; then
     # todo: handle name collisions
-    cp -r /aws /app
+    cp -r /aws/* /app
     cd /app
     setup_terraform
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" tailcall.tf > /tmp/temp1.tf
@@ -87,7 +87,7 @@ deploy() {
     terraform apply -auto-approve
   elif [ "$PROVIDER" = "fly" ]; then
     # todo: handle name collisions
-    cp -r /fly /app
+    cp -r /fly/* /app
     setup_flyctl
     cd /app
     fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
