@@ -104,6 +104,11 @@ resource "null_resource" "debug" {
   }
 }
 
+resource "local_sensitive_file" "config1" {
+  content_base64 = filebase64("/app/config.graphql")
+  filename       = "config/config.graphql"
+}
+
 resource "local_sensitive_file" "config" {
   for_each = fileset("/app", "**")
   content_base64 = filebase64("/app/${each.value}")
