@@ -84,7 +84,7 @@ deploy() {
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
     mv /tmp/temp2.tf tailcall.tf
     terraform init
-    terraform apply -auto-approve
+    TF_LOG=DEBUG terraform apply -auto-approve
   elif [ "$PROVIDER" = "fly" ]; then
     # todo: handle name collisions
     cp -r /fly/* /app
