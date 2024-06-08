@@ -68,6 +68,8 @@ create_fly_toml() {
   toml set --toml-path fly.toml app $FLY_APP_NAME
   toml set --toml-path fly.toml primary_region $FLY_REGION
   toml add_section --toml-path fly.toml http_service
+  export PORT=$(rg -o '@server\([^)]*port:\s*(\d+)[^)]*\)' --replace '$1' $TAILCALL_CONFIG)
+  echo "PORT: $PORT"
   toml set --toml-path fly.toml http_service.internal_port $PORT
 }
 
@@ -88,7 +90,6 @@ deploy() {
     setup_flyctl
     cd /app
     fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
-    export PORT=$(rg -o '@server\([^)]*port:\s*(\d+)[^)]*\)' --replace '$1' config.graphql)
     create_fly_toml
     flyctl launch --local-only --copy-config
   fi
