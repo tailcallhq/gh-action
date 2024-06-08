@@ -90,6 +90,7 @@ deploy() {
     cp -r /fly/* /app
     setup_flyctl
     cd /app
+    ls
     fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
     create_fly_toml
     flyctl launch --local-only --copy-config
