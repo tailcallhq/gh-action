@@ -11,6 +11,7 @@ setup_tailcall() {
 
 validate_tailcall_config() {
   setup_tailcall
+  echo "TAILCALL_CONFIG: $TAILCALL_CONFIG"
   TC_TRACER=false tailcall check $TAILCALL_CONFIG
 }
 
@@ -19,20 +20,12 @@ get_latest_version() {
 }
 
 cp -r . /app
-TC_CONFIG_DIR=/app
-for val in $(echo $TAILCALL_CONFIG | tr '/' '\n'); do
-  if [ "$val" = "." ]; then
-    continue
-  fi
-  if [[ "$val" == *".graphql" || "$val" == *".json" || "$val" == *".yml" ]]; then
-    TC_CONFIG_NAME=$val
-    EXTENSION=$(echo $val | tr '.' '\n' | tail -n 1)
-    break
-  fi
-done
+TC_CONFIG_DIR_ROOT=/app
+TC_CONFIG_DIR=$(dirname $TAILCALL_CONFIG)
+TC_CONFIG_NAME=$(basename $TAILCALL_CONFIG)
 
-mv "$TC_CONFIG_DIR/$TC_CONFIG_NAME" "$TC_CONFIG_DIR/config.$EXTENSION"
-export TAILCALL_CONFIG=$TC_CONFIG_DIR
+mv "$TC_CONFIG_DIR_ROOT/$TC_CONFIG_DIR/$TC_CONFIG_NAME" "$TC_CONFIG_DIR_ROOT/config.$EXTENSION"
+export TAILCALL_CONFIG="$TC_CONFIG_DIR_ROOT/config.$EXTENSION"
 validate_tailcall_config
 export TF_VAR_AWS_REGION=$AWS_REGION
 export TF_VAR_AWS_IAM_ROLE=$AWS_IAM_ROLE
@@ -49,6 +42,8 @@ if [ "$TAILCALL_VERSION" = "latest" ]; then
 fi
 export TF_VAR_TAILCALL_VERSION=$TAILCALL_VERSION
 
+cp $TAILCALL_CONFIG /aws/config.graphql
+cp $TAILCALL_CONFIG /fly/config.graphql
 
 setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
@@ -67,10 +62,19 @@ extract_urls() {
   grep -oE 'http[s]?://[^ "]+'
 }
 
+create_fly_toml() {
+  touch fly.toml
+  toml set --toml-path fly.toml app $FLY_APP_NAME
+  toml set --toml-path fly.toml primary_region $FLY_REGION
+  toml add_section --toml-path fly.toml http_service
+  toml set --toml-path fly.toml http_service.internal_port $PORT
+}
+
 deploy() {
   if [ "$PROVIDER" = "aws" ]; then
     # todo: handle name collisions
     cp -r /aws /app
+    cd /app
     setup_terraform
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
@@ -81,8 +85,11 @@ deploy() {
     # todo: handle name collisions
     cp -r /fly /app
     setup_flyctl
-    fly apps list | tail -n +2 | awk '{print $1}' | grep -w $FLY_APP_NAME > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
-    flyctl launch --name $FLY_APP_NAME --region $FLY_REGION --local-only
+    cd /app
+    fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
+    export PORT=$(rg -o '@server\([^)]*port:\s*(\d+)[^)]*\)' --replace '$1' config.graphql)
+    create_fly_toml
+    flyctl launch --local-only --copy-config
   fi
 }
 

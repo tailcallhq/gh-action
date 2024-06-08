@@ -6,6 +6,7 @@ COPY fly /fly
 COPY config.json /app/config.json
 
 RUN apk upgrade --no-cache && apk update --no-cache
-RUN apk add --no-cache curl jq
+RUN apk add --no-cache curl jq py-pip ripgrep
+RUN pip install toml-cli --break-system-packages
 
 ENTRYPOINT /bin/sh /scripts/entrypoint.sh
