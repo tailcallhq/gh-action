@@ -93,25 +93,9 @@ resource "local_sensitive_file" "bootstrap" {
   filename       = "config/bootstrap"
 }
 
-resource "null_resource" "debug" {
-  for_each = fileset("/app", "**")
-
-  provisioner "local-exec" {
-    command = <<EOT
-      echo "File: ${each.value}"
-      cat /app/${each.value} | base64
-    EOT
-  }
-}
-
-resource "local_sensitive_file" "config1" {
-  content_base64 = filebase64("/app/config.graphql")
-  filename       = "config/config.graphql"
-}
-
 resource "local_sensitive_file" "config" {
-  for_each = fileset("/app", "**")
-  content_base64 = filebase64("/app/${each.value}")
+  for_each = fileset("/app/./", "**")
+  content_base64 = filebase64("/app/./${each.value}")
   filename       = "config/${each.value}"
 }
 
