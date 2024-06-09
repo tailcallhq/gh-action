@@ -93,8 +93,26 @@ resource "local_sensitive_file" "bootstrap" {
   filename       = "config/bootstrap"
 }
 
-resource "local_sensitive_file" "config" {
-  for_each = fileset("${path.module}/app", "**")
+resource "local_sensitive_file" "config_yaml" {
+  for_each = fileset("${path.module}/app", "**.yaml")
+  content_base64 = filebase64("${path.module}/app/${each.value}")
+  filename       = "config/${each.value}"
+}
+
+resource "local_sensitive_file" "config_yml" {
+  for_each = fileset("${path.module}/app", "**.yml")
+  content_base64 = filebase64("${path.module}/app/${each.value}")
+  filename       = "config/${each.value}"
+}
+
+resource "local_sensitive_file" "config_json" {
+  for_each = fileset("${path.module}/app", "**.json")
+  content_base64 = filebase64("${path.module}/app/${each.value}")
+  filename       = "config/${each.value}"
+}
+
+resource "local_sensitive_file" "config_graphql" {
+  for_each = fileset("${path.module}/app", "**.graphql")
   content_base64 = filebase64("${path.module}/app/${each.value}")
   filename       = "config/${each.value}"
 }
@@ -102,7 +120,10 @@ resource "local_sensitive_file" "config" {
 data "archive_file" "tailcall" {
   depends_on = [
     local_sensitive_file.bootstrap,
-    local_sensitive_file.config
+    local_sensitive_file.config_graphql,
+    local_sensitive_file.config_json,
+    local_sensitive_file.config_yml,
+    local_sensitive_file.config_yaml,
   ]
   type        = "zip"
   source_dir  = "config"
