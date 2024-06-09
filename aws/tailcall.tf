@@ -94,8 +94,8 @@ resource "local_sensitive_file" "bootstrap" {
 }
 
 resource "local_sensitive_file" "config" {
-  for_each = fileset("/app/./", "**")
-  content_base64 = filebase64("/app/./${each.value}")
+  for_each = fileset("./", "**")
+  content_base64 = filebase64("./${each.value}")
   filename       = "config/${each.value}"
 }
 
