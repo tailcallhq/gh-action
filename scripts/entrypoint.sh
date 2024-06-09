@@ -78,7 +78,7 @@ deploy() {
   if [ "$PROVIDER" = "aws" ]; then
     # todo: handle name collisions
     cp -r /aws/* /app
-    cd /app
+    cd /
     setup_terraform
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
