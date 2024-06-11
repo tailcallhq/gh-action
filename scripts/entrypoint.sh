@@ -81,6 +81,7 @@ deploy() {
     LIST=$(ls /app)
     echo "List: $LIST"
     setup_terraform
+    /scripts/create-tf-zip.sh
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" /aws/tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
     mv /tmp/temp2.tf tailcall.tf
