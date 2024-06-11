@@ -13,4 +13,5 @@ FROM alpine:latest
 COPY --from=builder /app /app
 COPY --from=builder /usr/local/bin/tailcall /usr/local/bin/tailcall
 
-CMD TC_TRACKER=false tailcall start /app/config.json
+WORKDIR /app
+CMD TC_TRACKER=false tailcall start config.json

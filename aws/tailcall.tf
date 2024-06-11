@@ -93,21 +93,6 @@ resource "local_sensitive_file" "bootstrap" {
   filename       = "config/bootstrap"
 }
 
-resource "local_sensitive_file" "config" {
-  content_base64 = filebase64("config.graphql")
-  filename       = "config/config.graphql"
-}
-
-data "archive_file" "tailcall" {
-  depends_on = [
-    local_sensitive_file.bootstrap,
-    local_sensitive_file.config
-  ]
-  type        = "zip"
-  source_dir  = "config"
-  output_path = "tailcall.zip"
-}
-
 resource "aws_lambda_function" "tailcall" {
   depends_on = [
     data.archive_file.tailcall
