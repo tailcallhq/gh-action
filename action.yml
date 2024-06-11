@@ -49,6 +49,7 @@ inputs:
     required: false
     default: 'ord'
 runs:
+  using: 'docker'
   image: 'Dockerfile'
   run: echo "FLY_APP_NAME=$(printf ${{ inputs.fly-app-name }} | tr '/' '_')" >> $GITHUB_ENV
   env:
