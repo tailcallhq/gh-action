@@ -98,7 +98,7 @@ deploy() {
     cp /extras/config.json /fly/config.json
     setup_flyctl
     cd /fly
-    fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
+    fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm || echo "App not found"
     create_fly_toml
     flyctl launch --local-only --copy-config
   fi
