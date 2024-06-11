@@ -8,7 +8,7 @@
   },
   "links": [{
       "type": "Config",
-      "src": "./config.graphql"
+      "src": "config/config.graphql"
     }
   ]
 }
