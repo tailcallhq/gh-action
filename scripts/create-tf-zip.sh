@@ -6,7 +6,15 @@ depends_on="[ local_sensitive_file.bootstrap,";
 for file_path in $(find . -type f); do
   echo "Path: $file_path"
   name=$(basename $file_path | tr '.' '_')
-  config_path="${file_path/#./config}"
+
+  config_path="config"
+  for token in $(echo $file_path | tr '/' '\n'); do
+    if [ "$token" = "." ]; then
+      continue
+    else
+      config_path="$config_path/$token"
+    fi
+  done
 
   resource="resource \"local_sensitive_file\" \"$name\" {\n content_base64 = filebase64(\"$file_path\") \n filename = \"$config_path\"\n }"
 
