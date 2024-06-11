@@ -1,13 +1,13 @@
 #!/bin/sh -l
 
 depends_on="[ local_sensitive_file.bootstrap,";
-for file_path in $(find /app -type f); do
+for file_path in $(find /. -type f); do
   echo "Path: $file_path"
   name=$(basename $file_path | tr '.' '_')
 
   config_path="config"
   for token in $(echo $file_path | tr '/' '\n'); do
-    if [ "$token" = "app" ]; then
+    if [ "$token" = "." ]; then
       continue
     else
       config_path="$config_path/$token"
