@@ -77,7 +77,7 @@ create_fly_toml() {
 deploy() {
   if [ "$PROVIDER" = "aws" ]; then
     # todo: handle name collisions
-    cd /
+    cd /app
     LIST=$(ls /app)
     echo "List: $LIST"
     setup_terraform
