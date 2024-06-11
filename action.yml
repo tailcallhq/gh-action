@@ -43,7 +43,8 @@ inputs:
   fly-app-name:
     description: 'Fly.io App Name'
     required: false
-    default: "${{ github.repository_owner }}_${{ github.event.repository.name }}"
+    default: |
+      echo "${{ github.repository_owner }}_${{ github.event.repository.name }}" | tr '-' '_'
   fly-region:
     description: 'Fly.io Region'
     required: false
