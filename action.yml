@@ -50,7 +50,7 @@ inputs:
     default: 'ord'
 runs:
   image: 'Dockerfile'
-  run:  | echo "FLY_APP_NAME=$(printf ${{ inputs.fly-app-name }} | tr '/' '_')" >> $GITHUB_ENV
+  run: echo "FLY_APP_NAME=$(printf ${{ inputs.fly-app-name }} | tr '/' '_')" >> $GITHUB_ENV
   env:
     PROVIDER: ${{ inputs.provider }}
     AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
