@@ -17,3 +17,6 @@ depends_on="$depends_on]"
 
 archive_file="data \"archive_file\" \"tailcall\" { \n depends_on = $depends_on \n type = \"zip\" \n source_dir = \"config\" \n output_path = \"tailcall.zip\"\n }"
 echo "\n$archive_file\n" >> /aws/tailcall.tf
+
+echo "tailcall.tf"
+cat /aws/tailcall.tf
