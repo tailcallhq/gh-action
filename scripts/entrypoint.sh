@@ -58,7 +58,6 @@ setup_terraform() {
 setup_flyctl() {
   curl -L https://fly.io/install.sh | sh
   export PATH=$PATH:$HOME/.fly/bin
-  cp -r $HOME/.fly/bin/* /usr/local/bin
 }
 
 extract_urls() {
