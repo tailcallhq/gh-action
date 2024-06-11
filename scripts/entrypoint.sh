@@ -92,9 +92,9 @@ deploy() {
     TF_LOG=DEBUG terraform apply -auto-approve
   elif [ "$PROVIDER" = "fly" ]; then
     # todo: handle name collisions
-    cp -r /fly/* /app
+    cp -r /app/* /fly
     setup_flyctl
-    cd /app
+    cd /fly
     ls
     fly apps list | tail -n +2 | awk '{print $1}' | grep -w tailcall > /dev/null && fly apps destroy $FLY_APP_NAME --auto-confirm
     create_fly_toml
