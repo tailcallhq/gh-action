@@ -58,6 +58,7 @@ setup_terraform() {
 setup_flyctl() {
   curl -L https://fly.io/install.sh | sh
   export PATH=$PATH:$HOME/.fly/bin
+  cp -r $HOME/.fly/bin/* /usr/local/bin
 }
 
 extract_urls() {
@@ -92,8 +93,8 @@ deploy() {
     echo "List: $(find /app -type f)"
     TF_LOG=DEBUG terraform apply -auto-approve
   elif [ "$PROVIDER" = "fly" ]; then
-    # todo: handle name collisions
     mkdir -p /fly/config
+    # todo: handle name collisions
     cp -r /app/* /fly/config
     cp /extras/config.json /fly/config.json
     setup_flyctl
