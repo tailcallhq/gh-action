@@ -77,7 +77,8 @@ create_fly_toml() {
 deploy() {
   if [ "$PROVIDER" = "aws" ]; then
     # todo: handle name collisions
-    cp -r /app/* /aws
+    mkdir -p /aws/config
+    cp -r /app/* /aws/config
     cd /aws
     echo "List: $(find /app -type f)"
     /scripts/create-tf-zip.sh
