@@ -27,8 +27,9 @@ TC_CONFIG_DIR=$(dirname $TAILCALL_CONFIG)
 TC_CONFIG_NAME=$(basename $TAILCALL_CONFIG)
 EXTENSION=$(echo $TC_CONFIG_NAME | tr '.' '\n' | tail -n 1)
 
-mv "$TC_CONFIG_DIR_ROOT/$TC_CONFIG_DIR/$TC_CONFIG_NAME" "$TC_CONFIG_DIR_ROOT/config.$EXTENSION"
-export TAILCALL_CONFIG="$TC_CONFIG_DIR_ROOT/config.$EXTENSION"
+mv "$TC_CONFIG_DIR_ROOT/$TC_CONFIG_DIR/$TC_CONFIG_NAME" "$TC_CONFIG_DIR_ROOT/$TC_CONFIG_DIR/config.$EXTENSION"
+export TAILCALL_CONFIG="$TC_CONFIG_DIR_ROOT/$TC_CONFIG_DIR/config.$EXTENSION"
+export TC_RELATIVE_PATH="$TC_CONFIG_DIR/config.$EXTENSION"
 validate_tailcall_config
 export TF_VAR_AWS_REGION=$AWS_REGION
 export TF_VAR_AWS_IAM_ROLE=$AWS_IAM_ROLE
@@ -44,9 +45,6 @@ if [ "$TAILCALL_VERSION" = "latest" ]; then
   TAILCALL_VERSION=$(get_latest_version tailcallhq tailcall)
 fi
 export TF_VAR_TAILCALL_VERSION=$TAILCALL_VERSION
-
-cp $TAILCALL_CONFIG /aws/config.graphql
-cp $TAILCALL_CONFIG /fly/config.graphql
 
 setup_terraform() {
   TERRAFORM_VERSION=$(get_latest_version hashicorp terraform)
@@ -96,7 +94,7 @@ deploy() {
     mkdir -p /fly/config
     # todo: handle name collisions
     cp -r /app/* /fly/config
-    cp /extras/config.json /fly/config.json
+    awk -v config_path="\"$TC_RELATIVE_PATH\"" "{sub(/TC_CONFIG_PATH/,config_path)}1" /extras/config.json > /fly/config.json
     setup_flyctl
     cd /fly
     export FLY_APP_NAME="$(echo $FLY_APP_NAME | tr '_' '-')"

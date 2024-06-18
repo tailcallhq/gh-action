@@ -8,7 +8,7 @@
   },
   "links": [{
       "type": "Config",
-      "src": "config/config.graphql"
+      "src": "TC_CONFIG_PATH"
     }
   ]
 }
