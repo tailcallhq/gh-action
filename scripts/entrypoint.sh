@@ -94,7 +94,7 @@ deploy() {
     mkdir -p /fly/config
     # todo: handle name collisions
     cp -r /app/* /fly/config
-    awk -v config_path="\"$TC_RELATIVE_PATH\"" "{sub(/TC_CONFIG_PATH/,config_path)}1" /extras/config.json > /fly/config.json
+    awk -v config_path="$TC_RELATIVE_PATH" "{sub(/TC_CONFIG_PATH/,config_path)}1" /extras/config.json > /fly/config.json
     cat /fly/config.json
     setup_flyctl
     cd /fly
