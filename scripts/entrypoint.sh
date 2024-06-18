@@ -23,7 +23,8 @@ echo "DIRS: $(ls)"
 mkdir -p /app
 cp -r ./* /app
 TC_CONFIG_DIR_ROOT=/app
-TC_CONFIG_DIR=$(dirname $TAILCALL_CONFIG)
+TC_CONFIG_DIR=$(dirname $TAILCALL_CONFIG | sed 's|^\./||')
+echo $TC_CONFIG_DIR
 TC_CONFIG_NAME=$(basename $TAILCALL_CONFIG)
 EXTENSION=$(echo $TC_CONFIG_NAME | tr '.' '\n' | tail -n 1)
 
