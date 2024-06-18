@@ -85,9 +85,11 @@ deploy() {
     /scripts/create-tf-zip.sh
     echo "List: $(find /app -type f)"
     setup_terraform
+    BOOTSTRAP_PATH="config/$TC_CONFIG_DIR/bootstrap"
+    echo "BOOTSTRAP_PATH: $BOOTSTRAP_PATH"
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" /aws/tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
-    awk -v boot_strap_path="config/$TC_CONFIG_DIR/bootstrap" "{sub(/BOOTSTRAP_PATH/,workspace)}1" /tmp/temp2.tf > /tmp/temp3.tf
+    awk -v boot_strap_path="$BOOTSTRAP_PATH" "{sub(/BOOTSTRAP_PATH/,workspace)}1" /tmp/temp2.tf > /tmp/temp3.tf
     mv /tmp/temp3.tf tailcall.tf
     terraform init
     echo "List: $(find /app -type f)"
