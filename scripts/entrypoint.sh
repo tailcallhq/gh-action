@@ -91,9 +91,8 @@ deploy() {
     echo "List: $(find /app -type f)"
     TF_LOG=DEBUG terraform apply -auto-approve
   elif [ "$PROVIDER" = "fly" ]; then
-    mkdir -p /fly/config
     # todo: handle name collisions
-    cp -r /app/* /fly/config
+    cp -r /app/* /fly
     awk -v config_path="$TC_RELATIVE_PATH" "{sub(/TC_CONFIG_PATH/,config_path)}1" /extras/config.json > /fly/config.json
     cat /fly/config.json
     setup_flyctl
