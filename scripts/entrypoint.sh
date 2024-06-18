@@ -19,6 +19,7 @@ get_latest_version() {
   curl https://api.github.com/repos/$1/$2/releases/latest -s | jq .name -r
 }
 
+echo "DIRS: $(ls)"
 mkdir -p /app
 cp -r ./* /app
 TC_CONFIG_DIR_ROOT=/app
