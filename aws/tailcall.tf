@@ -90,7 +90,7 @@ data "http" "bootstrap" {
 
 resource "local_sensitive_file" "bootstrap" {
   content_base64 = data.http.bootstrap.response_body_base64
-  filename       = "config/bootstrap"
+  filename       = "BOOTSTRAP_PATH"
 }
 
 resource "aws_lambda_function" "tailcall" {
