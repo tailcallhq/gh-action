@@ -89,7 +89,7 @@ deploy() {
     echo "BOOTSTRAP_PATH: $BOOTSTRAP_PATH"
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" /aws/tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
-    awk -v boot_strap_path="$BOOTSTRAP_PATH" "{sub(/BOOTSTRAP_PATH/,workspace)}1" /tmp/temp2.tf > /tmp/temp3.tf
+    awk -v bootstrap_path="$BOOTSTRAP_PATH" "{sub(/BOOTSTRAP_PATH/,bootstrap_path)}1" /tmp/temp2.tf > /tmp/temp3.tf
     mv /tmp/temp3.tf tailcall.tf
     echo "config: $(cat tailcall.tf)"
     terraform init
