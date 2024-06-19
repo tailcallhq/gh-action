@@ -89,7 +89,7 @@ deploy() {
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" /aws/tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
     mv /tmp/temp2.tf tailcall.tf
-    echo "config: $(cat tailcall.tf)"
+    echo "list: $(ls -R)"
     terraform init
     echo "List: $(find /app -type f)"
     TF_LOG=DEBUG terraform apply -auto-approve
