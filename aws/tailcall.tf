@@ -97,10 +97,20 @@ resource "local_sensitive_file" "bootstrap" {
   filename       = var.BOOTSTRAP_PATH
 }
 
-resource "local_sensitive_file" "archive_file" {
+resource "local_sensitive_file" "config" {
   for_each = fileset(path.module, "config/**")
   content_base64 = filebase64("${each.key}")
   filename       = "${each.key}"
+}
+
+data "archive_file" "tailcall" {
+  type = "zip"
+  depends_on = [
+    local_sensitive_file.bootstrap,
+    local_sensitive_file.config
+  ]
+  source_dir = "config"
+  output_path = "tailcall.zip"
 }
 
 resource "aws_lambda_function" "tailcall" {
