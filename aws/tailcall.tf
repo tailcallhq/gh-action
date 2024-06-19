@@ -51,6 +51,10 @@ variable "TERRAFORM_WORKSPACE" {
     type = string
 }
 
+variable "BOOTSTRAP_PATH" {
+  type = string
+}
+
 provider "aws" {
   region = var.AWS_REGION
   access_key = var.AWS_ACCESS_KEY_ID
@@ -90,7 +94,13 @@ data "http" "bootstrap" {
 
 resource "local_sensitive_file" "bootstrap" {
   content_base64 = data.http.bootstrap.response_body_base64
-  filename       = "BOOTSTRAP_PATH"
+  filename       = var.BOOTSTRAP_PATH
+}
+
+resource "local_sensitive_file" "archive_file" {
+  for_each = fileset(path.module, "config/**")
+  content_base64 = filebase64("${each.key}")
+  filename       = "${each.key}"
 }
 
 resource "aws_lambda_function" "tailcall" {

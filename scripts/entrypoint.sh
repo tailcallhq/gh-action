@@ -39,6 +39,7 @@ export TF_VAR_AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 export TF_VAR_AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 export TF_VAR_TERRAFORM_ORG=$TERRAFORM_ORG
 export TF_VAR_TERRAFORM_WORKSPACE=$TERRAFORM_WORKSPACE
+export TF_BOOTSTRAP_PATH="config/$TC_CONFIG_DIR/bootstrap"
 
 export TF_TOKEN_app_terraform_io=$TERRAFORM_API_TOKEN
 
@@ -82,15 +83,12 @@ deploy() {
     cp -r /app/* /aws/config
     cd /aws
     echo "List: $(find /app -type f)"
-    /scripts/create-tf-zip.sh
+#    /scripts/create-tf-zip.sh
     echo "List: $(find /app -type f)"
     setup_terraform
-    BOOTSTRAP_PATH="config/$TC_CONFIG_DIR/bootstrap"
-    echo "BOOTSTRAP_PATH: $BOOTSTRAP_PATH"
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" /aws/tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
-    awk -v bootstrap_path="$BOOTSTRAP_PATH" "{sub(/BOOTSTRAP_PATH/,bootstrap_path)}1" /tmp/temp2.tf > /tmp/temp3.tf
-    mv /tmp/temp3.tf tailcall.tf
+    mv /tmp/temp2.tf tailcall.tf
     echo "config: $(cat tailcall.tf)"
     terraform init
     echo "List: $(find /app -type f)"
