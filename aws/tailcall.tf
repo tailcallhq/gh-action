@@ -122,7 +122,7 @@ resource "aws_lambda_function" "tailcall" {
   function_name    = var.AWS_LAMBDA_FUNCTION_NAME
   runtime          = "provided.al2"
   architectures    = ["x86_64"]
-  handler          = "bootstrap"
+  handler          = var.BOOTSTRAP_PATH
   filename         = data.archive_file.tailcall.output_path
   source_code_hash = data.archive_file.tailcall.output_base64sha256
 }
