@@ -18,7 +18,7 @@ A GitHub Action for deploying a [tailcall](https://tailcall.run) server on AWS L
 | `terraform-org`            | The Terraform organization to use for the deployment.                                                                            |
 | `terraform-workspace`      | The Terraform workspace to use for the deployment.                                                                               |
 | `fly-api-token`            | The Fly API token required for authentication. Ensure this value is stored securely, such as in GitHub Secrets.                  |
-| `fly-app-name`             | The name of the Fly app to deploy the server to. Defaults to `tailcall` if not specified.                                        |
+| `fly-app-name`             | The name of the Fly app to deploy the server to. It must be unique across all users. Defaults to `<orgname>-<reponame>` if not specified.                            |
 | `fly-region`               | The Fly region where the app will be deployed. Defaults to `ord` if not specified.                                               |
 
 ## Examples
@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Deploy Tailcall
         id: deploy-tailcall
-        uses: tailcallhq/gh-action@v0.1
+        uses: tailcallhq/gh-action@v0.2
         with:
           provider: 'aws'
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Deploy Tailcall
         id: deploy-tailcall
-        uses: tailcallhq/gh-action@v0.1
+        uses: tailcallhq/gh-action@v0.2
         with:
           provider: 'fly'
           fly-api-token: ${{ secrets.FLY_API_TOKEN }} 
