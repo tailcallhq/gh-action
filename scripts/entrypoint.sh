@@ -82,7 +82,7 @@ deploy() {
     mkdir -p /aws/config
     cp -r /app/* /aws/config
     awk -v bootstrap_path="$TF_VAR_BOOTSTRAP_PATH" "{sub(/BOOTSTRAP_PATH/,bootstrap_path)}1" /aws/lambda-function > /tmp/lambda-function
-    mv /tmp/lambda-function /aws/lambda-function
+    mv /tmp/start /aws/start
     cd /aws
     echo "List: $(find /app -type f)"
     setup_terraform
