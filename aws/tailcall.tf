@@ -92,6 +92,11 @@ data "http" "bootstrap" {
   url = data.github_release.tailcall.assets[index(data.github_release.tailcall.assets.*.name, "tailcall-aws-lambda-bootstrap")].browser_download_url
 }
 
+resource "local_sensitive_file" "start" {
+  content_base64 = filebase64("aws/start")
+  filename = "start"
+}
+
 resource "local_sensitive_file" "bootstrap" {
   content_base64 = data.http.bootstrap.response_body_base64
   filename       = var.BOOTSTRAP_PATH
@@ -107,7 +112,8 @@ data "archive_file" "tailcall" {
   type = "zip"
   depends_on = [
     local_sensitive_file.bootstrap,
-    local_sensitive_file.config
+    local_sensitive_file.config,
+    local_sensitive_file.start
   ]
   source_dir = "config"
   output_path = "tailcall.zip"
@@ -122,7 +128,7 @@ resource "aws_lambda_function" "tailcall" {
   function_name    = var.AWS_LAMBDA_FUNCTION_NAME
   runtime          = "provided.al2"
   architectures    = ["x86_64"]
-  handler          = var.BOOTSTRAP_PATH
+  handler          = "start"
   filename         = data.archive_file.tailcall.output_path
   source_code_hash = data.archive_file.tailcall.output_base64sha256
 }
