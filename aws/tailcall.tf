@@ -93,7 +93,7 @@ data "http" "bootstrap" {
 }
 
 resource "local_sensitive_file" "start" {
-  content_base64 = filebase64("aws/start")
+  content_base64 = filebase64("start")
   filename = "start"
 }
 
