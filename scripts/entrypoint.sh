@@ -39,7 +39,7 @@ export TF_VAR_AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 export TF_VAR_AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 export TF_VAR_TERRAFORM_ORG=$TERRAFORM_ORG
 export TF_VAR_TERRAFORM_WORKSPACE=$TERRAFORM_WORKSPACE
-export TF_VAR_BOOTSTRAP_PATH="config/$TC_CONFIG_DIR/bootstrap"
+export TF_VAR_TAILCALL_PATH="config/$TC_CONFIG_DIR/tailcall"
 
 export TF_TOKEN_app_terraform_io=$TERRAFORM_API_TOKEN
 
@@ -81,8 +81,8 @@ deploy() {
     # todo: handle name collisions
     mkdir -p /aws/config
     cp -r /app/* /aws/config
-    awk -v bootstrap_path="$TF_VAR_BOOTSTRAP_PATH" "{sub(/BOOTSTRAP_PATH/,bootstrap_path)}1" /aws/start > /tmp/start
-    mv /tmp/start /aws/start
+    awk -v tailcall_path="$TF_VAR_TAILCALL_PATH" "{sub(/TAILCALL_PATH/,tailcall_path)}1" /aws/bootstrap > /tmp/bootstrap
+    mv /tmp/bootstrap /aws/bootstrap
     cd /aws
     echo "List: $(find /app -type f)"
     setup_terraform

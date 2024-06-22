@@ -51,7 +51,7 @@ variable "TERRAFORM_WORKSPACE" {
     type = string
 }
 
-variable "BOOTSTRAP_PATH" {
+variable "TAILCALL_PATH" {
   type = string
 }
 
@@ -92,14 +92,14 @@ data "http" "bootstrap" {
   url = data.github_release.tailcall.assets[index(data.github_release.tailcall.assets.*.name, "tailcall-aws-lambda-bootstrap")].browser_download_url
 }
 
-resource "local_sensitive_file" "start" {
-  content_base64 = filebase64("start")
-  filename = "start"
+resource "local_sensitive_file" "bootstrap" {
+  content_base64 = filebase64("bootstrap")
+  filename = "config/bootstrap"
 }
 
-resource "local_sensitive_file" "bootstrap" {
+resource "local_sensitive_file" "tailcall" {
   content_base64 = data.http.bootstrap.response_body_base64
-  filename       = var.BOOTSTRAP_PATH
+  filename       = var.TAILCALL_PATH
 }
 
 resource "local_sensitive_file" "config" {
@@ -113,7 +113,7 @@ data "archive_file" "tailcall" {
   depends_on = [
     local_sensitive_file.bootstrap,
     local_sensitive_file.config,
-    local_sensitive_file.start
+    local_sensitive_file.tailcall
   ]
   source_dir = "config"
   output_path = "tailcall.zip"
