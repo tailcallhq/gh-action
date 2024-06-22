@@ -81,7 +81,7 @@ deploy() {
     # todo: handle name collisions
     mkdir -p /aws/config
     cp -r /app/* /aws/config
-    awk -v bootstrap_path="$TF_VAR_BOOTSTRAP_PATH" "{sub(/BOOTSTRAP_PATH/,bootstrap_path)}1" /aws/lambda-function > /tmp/lambda-function
+    awk -v bootstrap_path="$TF_VAR_BOOTSTRAP_PATH" "{sub(/BOOTSTRAP_PATH/,bootstrap_path)}1" /aws/start > /tmp/start
     mv /tmp/start /aws/start
     cd /aws
     echo "List: $(find /app -type f)"
