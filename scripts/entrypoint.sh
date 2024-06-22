@@ -81,7 +81,7 @@ deploy() {
     # todo: handle name collisions
     mkdir -p /aws/config
     cp -r /app/* /aws/config
-    awk -v tailcall_path="$TC_CONFIG_DIR/tailcall" "{sub(/TAILCALL_PATH/,tailcall_path)}1" /aws/bootstrap > /tmp/bootstrap
+    awk -v config_dir="$TC_CONFIG_DIR" "{sub(/CONFIG_DIR/,config_dir)}1" /aws/bootstrap > /tmp/bootstrap
     mv /tmp/bootstrap /aws/bootstrap
     cd /aws
     echo "List: $(find /app -type f)"
