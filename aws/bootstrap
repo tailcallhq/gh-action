@@ -1,0 +1,4 @@
+#!/bin/sh -l
+
+cd CONFIG_DIR
+./tailcall

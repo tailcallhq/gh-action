@@ -19,11 +19,12 @@ get_latest_version() {
   curl https://api.github.com/repos/$1/$2/releases/latest -s | jq .name -r
 }
 
-echo "DIRS: $(ls)"
+echo "DIRS: $(ls -R)"
 mkdir -p /app
 cp -r ./* /app
 TC_CONFIG_DIR_ROOT=/app
-TC_CONFIG_DIR=$(dirname $TAILCALL_CONFIG)
+TC_CONFIG_DIR=$(dirname $TAILCALL_CONFIG | sed 's|^\./||')
+echo $TC_CONFIG_DIR
 TC_CONFIG_NAME=$(basename $TAILCALL_CONFIG)
 EXTENSION=$(echo $TC_CONFIG_NAME | tr '.' '\n' | tail -n 1)
 
@@ -38,6 +39,7 @@ export TF_VAR_AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
 export TF_VAR_AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 export TF_VAR_TERRAFORM_ORG=$TERRAFORM_ORG
 export TF_VAR_TERRAFORM_WORKSPACE=$TERRAFORM_WORKSPACE
+export TF_VAR_TAILCALL_PATH="config/$TC_CONFIG_DIR/tailcall"
 
 export TF_TOKEN_app_terraform_io=$TERRAFORM_API_TOKEN
 
@@ -79,15 +81,15 @@ deploy() {
     # todo: handle name collisions
     mkdir -p /aws/config
     cp -r /app/* /aws/config
+    awk -v config_dir="$TC_CONFIG_DIR" "{sub(/CONFIG_DIR/,config_dir)}1" /aws/bootstrap > /tmp/bootstrap
+    mv /tmp/bootstrap /aws/bootstrap
     cd /aws
-    echo "List: $(find /app -type f)"
-    /scripts/create-tf-zip.sh
     echo "List: $(find /app -type f)"
     setup_terraform
     awk -v org="\"$TERRAFORM_ORG\"" "{sub(/var.TERRAFORM_ORG/,org)}1" /aws/tailcall.tf > /tmp/temp1.tf
     awk -v workspace="\"$TERRAFORM_WORKSPACE\"" "{sub(/var.TERRAFORM_WORKSPACE/,workspace)}1" /tmp/temp1.tf > /tmp/temp2.tf
-    awk -v boot_strap_path="config/$TC_CONFIG_DIR/bootstrap" "{sub(/BOOTSTRAP_PATH/,workspace)}1" /tmp/temp2.tf > /tmp/temp3.tf
-    mv /tmp/temp3.tf tailcall.tf
+    mv /tmp/temp2.tf tailcall.tf
+    echo "list: $(ls -R)"
     terraform init
     echo "List: $(find /app -type f)"
     TF_LOG=DEBUG terraform apply -auto-approve

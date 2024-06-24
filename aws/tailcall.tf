@@ -51,6 +51,10 @@ variable "TERRAFORM_WORKSPACE" {
     type = string
 }
 
+variable "TAILCALL_PATH" {
+  type = string
+}
+
 provider "aws" {
   region = var.AWS_REGION
   access_key = var.AWS_ACCESS_KEY_ID
@@ -89,8 +93,30 @@ data "http" "bootstrap" {
 }
 
 resource "local_sensitive_file" "bootstrap" {
+  content_base64 = filebase64("bootstrap")
+  filename = "config/bootstrap"
+}
+
+resource "local_sensitive_file" "tailcall" {
   content_base64 = data.http.bootstrap.response_body_base64
-  filename       = "BOOTSTRAP_PATH"
+  filename       = var.TAILCALL_PATH
+}
+
+resource "local_sensitive_file" "config" {
+  for_each = fileset(path.module, "config/**")
+  content_base64 = filebase64("${each.key}")
+  filename       = "${each.key}"
+}
+
+data "archive_file" "tailcall" {
+  type = "zip"
+  depends_on = [
+    local_sensitive_file.bootstrap,
+    local_sensitive_file.config,
+    local_sensitive_file.tailcall
+  ]
+  source_dir = "config"
+  output_path = "tailcall.zip"
 }
 
 resource "aws_lambda_function" "tailcall" {
@@ -102,7 +128,7 @@ resource "aws_lambda_function" "tailcall" {
   function_name    = var.AWS_LAMBDA_FUNCTION_NAME
   runtime          = "provided.al2"
   architectures    = ["x86_64"]
-  handler          = "bootstrap"
+  handler          = "start"
   filename         = data.archive_file.tailcall.output_path
   source_code_hash = data.archive_file.tailcall.output_base64sha256
 }
